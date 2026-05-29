@@ -62,13 +62,13 @@ object Constantes {
     val BASE_PDF_FLYWIRE = config.basePdfFlywire
     val URL_PDF_FLYWIREPECANO = config.urlPdfFlywirePecano
 
-    val BASE_FICHA_MTR = "https://alumno.ilcb.edu.pe/"
+    val BASE_FICHA_MTR = "https://alumno.ulcb.edu.pe/"
 
     //val RECIPIENT_DOMAIN = "ILP"
     var RECIPIENT_DOMAIN = "LEP" //Universidad
 
     val ID_SISTEMA = 23 //Universidad 23 - Instituto 24 - Android
-    val BASE_UNEG = "ilcb"
+    val BASE_UNEG = "ulcb"
 
     val ENV_DOMAIN = config.envDomain  //cuenta corriente
 
