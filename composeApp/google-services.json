@@ -1,0 +1,143 @@
+{
+  "project_info": {
+    "project_number": "940383014357",
+    "firebase_url": "https://ulcb-a9cbe-default-rtdb.firebaseio.com",
+    "project_id": "ulcb-a9cbe",
+    "storage_bucket": "ulcb-a9cbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940383014357:android:2e95f08ca1a4a82c7cc15c",
+        "android_client_info": {
+          "package_name": "pe.lecordonbleu.institutoestudiante"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940383014357-pd9mm334psjfoi3g10cf6t0r2lfjp80m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.lecordonbleu.institutoestudiante",
+            "certificate_hash": "0313bd946df14319cb724b13050f23ced3a6e89c"
+          }
+        },
+        {
+          "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6_2Fk9fCBVCvUCAa_2DX4C_AMQEP49wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "940383014357-83ht3h6crmhtl9agb8ppo3419mv3kp2q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "pe.ulcb.cordonbleu"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940383014357:android:9f963550d28fd6e87cc15c",
+        "android_client_info": {
+          "package_name": "pe.lecordonbleu.universidad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940383014357-opjtk5aqarm66nh515lksdgpptjuaq8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.lecordonbleu.universidad",
+            "certificate_hash": "0313bd946df14319cb724b13050f23ced3a6e89c"
+          }
+        },
+        {
+          "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6_2Fk9fCBVCvUCAa_2DX4C_AMQEP49wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "940383014357-83ht3h6crmhtl9agb8ppo3419mv3kp2q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "pe.ulcb.cordonbleu"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940383014357:android:464aae90b65ab4cd7cc15c",
+        "android_client_info": {
+          "package_name": "pe.lecordonbleu.universidadestudiante"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940383014357-s2sn4jc53i433j4i19krgarkcj267l3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.lecordonbleu.universidadestudiante",
+            "certificate_hash": "0313bd946df14319cb724b13050f23ced3a6e89c"
+          }
+        },
+        {
+          "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6_2Fk9fCBVCvUCAa_2DX4C_AMQEP49wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940383014357-klgr9qlnjtum1dbfvgpuen8elf5sbeo7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "940383014357-83ht3h6crmhtl9agb8ppo3419mv3kp2q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "pe.ulcb.cordonbleu"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

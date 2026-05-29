@@ -1,0 +1,47 @@
+package pe.lecordonbleu.universidadestudiante.data.remote.dto
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ListCuentaCorriente(
+    val fec_vencimiento: String,
+    val estado: Int,
+    val periodo: String,
+    val tipo_pago_cta: Int,
+    val mora_aplicar: String,
+    val estado_nombre: String,
+    val id_docu_comp: Int,
+    val id_tiposerva: Int,
+    val monto_inicial: String,
+    val id_peracad: Int,
+    val fecha_pago: String,
+    val nro_cuota: Int,
+    val estado_reg: Int,
+    val monto_mora: String,
+    val id_oper_cuota_det: Int,
+    val mes: String,
+    val id_uneg: Int,
+    val monto_pendiente: String,
+    val item: Int,
+    val monto_total: String,
+    val forma_pago_cta: Int,
+    val tari_gen_abrev: String,
+    val prefactura: String,
+    val id_estud_serv: Int,
+    val monto_descuento: String,
+    val monto_total_pago: String,
+    val estadi_periodo: Int,
+    val id_oper_cuota: Int,
+    val estado_nav_delete: Int,
+    val id_oper: Int,
+    val id_estud_pe: Int,
+    val concepto_nombre: String,
+    val nro_cuota_intranet: Int,
+    val id_pago: Int
+)
+
+@Serializable
+data class ResponseListarCuentaCorriente(
+    val flag_val: Int,
+    val ListCuentaCorriente: List<ListCuentaCorriente> = emptyList()
+)

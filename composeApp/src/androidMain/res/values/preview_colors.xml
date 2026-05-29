@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Referencia visual solo para Android Studio. No usar como fuente real del tema. -->
+
+    <color name="ilcb_blue_dark_ts">#182957</color>
+    <color name="ilcb_blue_deep_ts">#00205C</color>
+    <color name="ilcb_blue_mid_ts">#2A4A8E</color>
+    <color name="ilcb_blue_accent_ts">#3F51B5</color>
+
+    <color name="ilcb_blue_dark_dm_ts">#1A237E</color>
+    <color name="ilcb_blue_mid_dm_ts">#7D9AD1</color>
+    <color name="ilcb_blue_indigo_dm_ts">#303F9F</color>
+
+    <color name="ilcb_gold_ts">#9B865C</color>
+    <color name="ilcb_gold_light_ts">#C5A059</color>
+
+    <color name="ilcb_surface_ts">#F1F1F1</color>
+    <color name="ilcb_surface_dark_ts">#090808</color>
+    <color name="ilcb_background_ts">#FFFFFF</color>
+    <color name="ilcb_background_dark_ts">#1E1C1C</color>
+    <color name="ilcb_dialog_bg_ts">#F9F9F9</color>
+
+    <color name="ilcb_on_surface_ts">#000000</color>
+    <color name="ilcb_on_brand_ts">#FFFFFF</color>
+
+    <color name="ilcb_purple_ts">#6A66FF</color>
+    <color name="ilcb_blue_accento_ts">#536DFE</color>
+    <color name="ilcb_azul_cielo_ts">#4493F8</color>
+    <color name="ilcb_azul_profundo_ts">#00487E</color>
+
+    <color name="ilcb_violeta_ts">#7719AA</color>
+    <color name="ilcb_azul_medio_ts">#5D61C8</color>
+    <color name="ilcb_naranja_ts">#F08705</color>
+    <color name="ilcb_azul_fuerte_ts">#0063DD</color>
+    <color name="ilcb_azul_marca_ts">#3894F9</color>
+
+    <color name="ilcb_naranja_oscuro_ts">#EF6C00</color>
+    <color name="ilcb_naranja_rojo_ts">#E65100</color>
+    <color name="ilcb_error_ts">#D82625</color>
+    <color name="ilcb_error_dark_ts">#C62828</color>
+    <color name="ilcb_warning_ts">#FFA000</color>
+    <color name="ilcb_ambar_ts">#EEAC2A</color>
+    <color name="ilcb_verde_medio_ts">#3A6F3A</color>
+    <color name="ilcb_verde_claro_ts">#8BC34A</color>
+    <color name="ilcb_green_dark_ts">#1B5E20</color>
+    <color name="ilcb_green_mid_ts">#2E7D32</color>
+    <color name="ilcb_cian_ts">#00BCD4</color>
+    <color name="ilcb_blue_md_ts">#0D47A1</color>
+
+    <color name="ilcb_gris_suave_ts">#9E9E9E</color>
+    <color name="ilcb_gris_medio_ts">#7B6F72</color>
+    <color name="ilcb_gris_claro_ts">#F7F8F8</color>
+    <color name="ilcb_gris_oscuro_ts">#1E1E1E</color>
+    <color name="ilcb_gris_azulado_ts">#B0BEC5</color>
+    <color name="ilcb_gris_neutro_ts">#757575</color>
+    <color name="ilcb_gris_pizarra_ts">#37474F</color>
+    <color name="ilcb_gris_charcoal_ts">#424242</color>
+
+    <color name="ilcb_violeta_medio_ts">#8B5CF6</color>
+    <color name="ilcb_esmeralda_ts">#10B981</color>
+    <color name="ilcb_rosado_ts">#EC4899</color>
+    <color name="ilcb_naranja_dorado_ts">#FF931F</color>
+    <color name="ilcb_dorado_claro_ts">#FFBC30</color>
+
+    <color name="ilcb_pastel_teal_ts">#E0F2F1</color>
+    <color name="ilcb_pastel_azul_ts">#E3F2FD</color>
+    <color name="ilcb_pastel_marron_ts">#D7CCC8</color>
+    <color name="ilcb_pastel_verde_ts">#E8F5E9</color>
+    <color name="ilcb_pastel_lavanda_ts">#EDE7F6</color>
+    <color name="ilcb_pastel_gris_ts">#ECEFF1</color>
+    <color name="ilcb_pastel_rosa_ts">#FCE4EC</color>
+    <color name="ilcb_pastel_morado_ts">#F3E5F5</color>
+    <color name="ilcb_pastel_naranja_ts">#FFF3E0</color>
+    <color name="ilcb_pastel_naranja_medio_ts">#FFE0B2</color>
+    <color name="ilcb_pastel_verde_medio_ts">#C8E6C9</color>
+
+    <color name="ilcb_stripe_rojo_ts">#EA4335</color>
+    <color name="ilcb_stripe_azul_ts">#4285F4</color>
+    <color name="ilcb_stripe_ambar_ts">#FBBC04</color>
+    <color name="ilcb_stripe_verde_ts">#34A853</color>
+    <color name="ilcb_stripe_morado_ts">#8E24AA</color>
+    <color name="ilcb_stripe_cian_ts">#00ACC1</color>
+    <color name="ilcb_stripe_naranja_ts">#FF7043</color>
+    <color name="ilcb_stripe_indigo_ts">#3949AB</color>
+    <color name="ilcb_stripe_rosado_ts">#D81B60</color>
+    <color name="ilcb_stripe_teal_ts">#00897B</color>
+</resources>

@@ -1,0 +1,72 @@
+# ============================
+# Kotlin Multiplatform (KMP)
+# iOS + Android + Compose
+# ============================
+
+# Claude Code
+.claude/settings.local.json
+
+# Build outputs
+build/
+**/build/
+!src/**/build/
+
+# Gradle
+.gradle/
+buildSrc/.gradle/
+*.iml
+
+# Kotlin
+.kotlin/
+
+# IDE - IntelliJ / Android Studio
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Android
+local.properties
+*.apk
+*.aab
+*.dex
+*.log
+
+# iOS - Xcode
+xcuserdata/
+*.xcuserstate
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+**/xcshareddata/WorkspaceSettings.xcsettings
+*.ipa
+
+# Swift Package Manager
+.build/
+*.swiftpm
+
+# CocoaPods
+Pods/
+.cocoapods/
+*.podspec
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Kotlin/Native
+.konan/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Temporales
+*.orig
+*.rej
+
+# Node (por si se agrega algún tooling JS)
+node_modules/
