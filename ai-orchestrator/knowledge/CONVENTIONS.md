@@ -266,7 +266,7 @@ CustomDialogBasic(
 ```kotlin
 LaunchedEffect(idSistema, idPerfil) {
     viewModel.fetchProyeccionValidacion(idEstud)
-    viewModel.setUserMenuRequest(2, idSistema, idPerfil)
+    viewModel.setUserMenuRequest(1, idSistema, idPerfil)
 }
 ```
 

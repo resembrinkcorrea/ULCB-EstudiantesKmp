@@ -145,7 +145,7 @@ fun ETAScreen(
                 if (id_estud_serv != null && id_pest_det != null) {
                     viewModel.setDocumentosEtaRequest(
                         id_pest_det = id_pest_det!!,
-                        id_uneg = 2,
+                        id_uneg = 1,
                         id_oacad_arranque = id_oacad_arranque!!,
                         id_estud_serv = id_estud_serv!!,
                         id_oaa_pcs = id_oaa_pcs!!
@@ -277,7 +277,7 @@ fun ETAScreen(
                         if (id_estud_serv != null && id_pest_det != null && id_oacad_arranque != null && id_oaa_pcs != null) {
                             viewModel.setDocumentosEtaRequest(
                                 id_pest_det = id_pest_det!!,
-                                id_uneg = 2,
+                                id_uneg = 1,
                                 id_oacad_arranque = id_oacad_arranque!!,
                                 id_estud_serv = id_estud_serv!!,
                                 id_oaa_pcs = id_oaa_pcs!!
@@ -371,7 +371,7 @@ fun ListaDocumentosETA(
                 val id_sistema = settingsStorage.getInt("idSistema", 0).toString()
                 onCambiarCarga(true)
                 viewModel.setGuardarEtaRequest(
-                    id_uneg = 2,
+                    id_uneg = 1,
                     pdfbase64 = base64,
                     id_estud = idEstud ?: "",
                     id_user = id_usuario,

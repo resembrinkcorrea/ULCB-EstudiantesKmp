@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.DarkModeColors
 import pe.lecordonbleu.universidadestudiante.leCordonBleuFont
@@ -93,7 +93,7 @@ fun MainTopBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.logo_instbleu),
+                        painter = painterResource(Res.drawable.ulcb_logo_circle),
                         contentDescription = "Menu",
                         tint = Color.White,
                         modifier = Modifier.size(28.dp)

@@ -122,13 +122,13 @@ fun MallaCurricularScreen(
                     ?.firstOrNull { it.pest_det_nombre == seleccionPlanEstudio }
 
             planSeleccionado?.let {
-                viewModel.setValoresPlanRequest(it.id_estud_pe, it.id_pest_det, it.id_serv, 2)
-                viewModel.setTablaPlanRequest(it.id_estud_pe, it.id_pest_det, it.id_serv, 2, idEstud)
+                viewModel.setValoresPlanRequest(it.id_estud_pe, it.id_pest_det, it.id_serv, 1)
+                viewModel.setTablaPlanRequest(it.id_estud_pe, it.id_pest_det, it.id_serv, 1, idEstud)
                 viewModel.setGenerarPdfRequest(
                     id_estud_pe = it.id_estud_pe,
                     id_pest_det = it.id_pest_det,
                     id_serv = it.id_serv,
-                    id_uneg = 2,
+                    id_uneg = 1,
                     id_estud = idEstud
                 )
             }
@@ -193,7 +193,7 @@ fun MallaCurricularScreen(
                                 id_estud_pe = it.id_estud_pe,
                                 id_pest_det = it.id_pest_det,
                                 id_serv = it.id_serv,
-                                id_uneg = 2,
+                                id_uneg = 1,
                                 id_estud = idEstud
                             )
                         }

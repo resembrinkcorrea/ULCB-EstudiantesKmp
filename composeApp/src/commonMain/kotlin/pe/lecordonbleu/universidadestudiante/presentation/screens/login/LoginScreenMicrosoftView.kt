@@ -67,7 +67,7 @@ fun LoginScreenMicrosoftView(viewModel: LoginMicrosoftViewModel, navigator: NavC
     var tipoLogin by remember { mutableStateOf(1) }
 
     var flagLogueo by remember { mutableStateOf(1) }
-    var idUneg by remember { mutableStateOf(2) }
+    var idUneg by remember { mutableStateOf(1) }
     var tipoConexion by remember { mutableStateOf("ANDROID Estudiante") }
     var ipConexion by remember { mutableStateOf("") }
 
@@ -142,7 +142,7 @@ fun LoginScreenMicrosoftView(viewModel: LoginMicrosoftViewModel, navigator: NavC
 
             Spacer(modifier = Modifier.height(120.dp))
 
-            Text("ILCB Sesión Microsoft", color = colors.textColor)
+            Text("ULCB Sesión Microsoft", color = colors.textColor)
 
             Spacer(modifier = Modifier.height(60.dp))
 

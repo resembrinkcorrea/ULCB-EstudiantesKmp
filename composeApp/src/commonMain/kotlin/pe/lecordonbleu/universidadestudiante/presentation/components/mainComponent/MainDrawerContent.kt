@@ -1,6 +1,7 @@
 package pe.lecordonbleu.universidadestudiante.presentation.components.mainComponent
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,11 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_ilcb_1
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.DarkModeColors
 import pe.lecordonbleu.universidadestudiante.getAppVersion
+import ulcbintranetkmp.composeapp.generated.resources.logo_ulcb_anniversary
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_white
 
 @Composable
 fun MainDrawerContent(
@@ -103,11 +105,11 @@ fun MainDrawerContent(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.logo_ilcb_1),
-                            contentDescription = "Logo ILCB",
-                            tint = Color.White,
-                            modifier = Modifier.height(56.dp)
+                        Image(
+                            painter = painterResource(Res.drawable.ulcb_logo_white),
+                            contentDescription = "Logo ULCB",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxWidth(0.85f).height(160.dp)
                         )
                     }
 
@@ -139,7 +141,7 @@ fun MainDrawerContent(
                                 contentAlignment = Alignment.Center
                             ) {
                                 AsyncImage(
-                                    model = userFoto.ifEmpty { Res.drawable.logo_instbleu },
+                                    model = userFoto.ifEmpty { Res.drawable.ulcb_logo_circle },
                                     contentDescription = "Foto de perfil",
                                     modifier = Modifier
                                         .fillMaxSize()

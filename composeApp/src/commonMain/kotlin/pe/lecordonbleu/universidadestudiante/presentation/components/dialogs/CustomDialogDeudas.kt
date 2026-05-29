@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbBlueDeep
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbBlueMid
@@ -50,6 +50,7 @@ import pe.lecordonbleu.universidadestudiante.core.theme.IlcbOnBrand
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbWarning
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListaDeudaCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 
 @Composable
 fun CustomDialogDeudas(
@@ -125,7 +126,7 @@ fun CustomDialogDeudas(
 
                 // ── Logo ─────────────────────────────────────────────────────────
                 Image(
-                    painter = painterResource(Res.drawable.logo_instbleu),
+                    painter = painterResource(Res.drawable.ulcb_logo_circle),
                     contentDescription = "Logo LCB",
                     modifier = Modifier
                         .height(52.dp)

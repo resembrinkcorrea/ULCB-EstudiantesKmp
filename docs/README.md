@@ -1,4 +1,4 @@
-# ILCB Estudiantes KMP — Documentación del Proyecto
+# ULCB Estudiantes KMP — Documentación del Proyecto
 
 > **Universidad Le Cordon Bleu Perú**
 > Aplicación móvil multiplataforma para estudiantes (Android + iOS).

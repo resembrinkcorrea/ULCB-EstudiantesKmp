@@ -101,7 +101,7 @@ fun RegistrarTramiteDocumentarioScreen(
     val focusManager = LocalFocusManager.current
     val settings = getSettingsStorage()
     val idSistema = 13
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = settings.getInt("id_uneg", 1)
     val idEstud = settings.getInt("idEstud", 0)
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
     val idUsuario = settings.getInt("idUsuario", settings.getInt("id_usuario", 0))

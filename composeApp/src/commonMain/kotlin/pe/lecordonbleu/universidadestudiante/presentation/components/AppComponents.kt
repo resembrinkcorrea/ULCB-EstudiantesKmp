@@ -64,11 +64,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import pe.lecordonbleu.universidadestudiante.leCordonBleuFont
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.AccionIconButton
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 
 @Composable
 fun MyTextFieldComponent(
@@ -495,7 +496,7 @@ fun StandardTopBar(
         },
         actions = {
             Icon(
-                painter = painterResource(Res.drawable.logo_instbleu),
+                painter = painterResource(Res.drawable.ulcb_logo_circle),
                 contentDescription = "Logo",
                 tint = Color.White,
                 modifier = Modifier.padding(end = 16.dp).size(36.dp)

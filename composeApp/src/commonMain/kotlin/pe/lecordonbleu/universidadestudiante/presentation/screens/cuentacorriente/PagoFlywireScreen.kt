@@ -34,7 +34,7 @@ fun PagoFlywireScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             StandardTopBar(
-                title = "ILCB - Flywire",
+                title = "ULCB - Flywire",
                 subtitle = "Cuenta Corriente",
                 onBackClick = { volver() },
                 scrollBehavior = scrollBehavior

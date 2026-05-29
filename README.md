@@ -1,4 +1,4 @@
-# ILCB Estudiantes KMP
+# ULCB Estudiantes KMP
 
 > **Universidad Le Cordon Bleu Perú**
 > Aplicación móvil multiplataforma para estudiantes — Android + iOS.

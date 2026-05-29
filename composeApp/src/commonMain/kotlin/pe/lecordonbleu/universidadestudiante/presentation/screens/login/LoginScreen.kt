@@ -93,7 +93,7 @@ fun LoginScreen(
 
 
     var flagLogueo by remember { mutableStateOf(0) }
-    var idUneg by remember { mutableStateOf(2) }
+    var idUneg by remember { mutableStateOf(1) }
     var tipoConexion by remember { mutableStateOf("ANDROID Estudiante") }
     var ipConexion by remember { mutableStateOf("") }
     var lastPwd by remember { mutableStateOf("") }

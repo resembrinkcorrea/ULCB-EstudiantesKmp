@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_ilcb_1
-import ulcbintranetkmp.composeapp.generated.resources.logo_ilcb_2
+import ulcbintranetkmp.composeapp.generated.resources.logo_ulcb_anniversary
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo
 import ulcbintranetkmp.composeapp.generated.resources.logo_ilcb_3
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
@@ -28,8 +28,8 @@ fun CarruselLogos(modifier: Modifier = Modifier) {
     )
 
     val logosData = listOf(
-        Triple(Res.drawable.logo_ilcb_1, Color.White, goldGradient),
-        Triple(Res.drawable.logo_ilcb_2, Color.White, goldGradient),
+        Triple(Res.drawable.logo_ulcb_anniversary, Color.White, goldGradient),
+        Triple(Res.drawable.ulcb_logo, Color.White, goldGradient),
         Triple(Res.drawable.logo_ilcb_3, Color.White, goldGradient),
     )
 

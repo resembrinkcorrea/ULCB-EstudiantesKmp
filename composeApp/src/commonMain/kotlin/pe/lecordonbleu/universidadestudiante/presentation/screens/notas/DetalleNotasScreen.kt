@@ -60,7 +60,7 @@ fun DetalleNotasScreen(
     // ─── Sección 1 — Variables ────────────────────────────────────────────────
     val colors = getColorsTheme()
     val settings = getSettingsStorage()
-    val idUneg = 2
+    val idUneg = 1
 
     val gruposTareas by viewModel.gruposTareas.collectAsStateWithLifecycle()
     val tabs = listOf("PROMEDIO NOTAS") + gruposTareas.map { it.nombrePestana.uppercase() }

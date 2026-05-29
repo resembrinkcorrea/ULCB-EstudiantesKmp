@@ -96,7 +96,7 @@ fun CuentaCorrienteScreen(
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = settings.getInt("id_uneg", 1)
 
     val uiStateServicio by viewModel.uiStateServicio.collectAsStateWithLifecycle()
     val uiStatePeriodo by viewModel.uiStatePeriodo.collectAsStateWithLifecycle()

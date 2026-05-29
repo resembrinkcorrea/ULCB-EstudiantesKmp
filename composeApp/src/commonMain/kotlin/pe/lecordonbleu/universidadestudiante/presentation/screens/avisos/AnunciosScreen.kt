@@ -74,7 +74,7 @@ fun AnunciosScreen(
     var mensaje by remember { mutableStateOf("No hay avisos disponibles.") }
 
     LaunchedEffect(Unit) {
-        viewModel.setAnunciosRequest(id_uneg = 2, id_sistema = idSistema, id_usuario = idUsuario)
+        viewModel.setAnunciosRequest(id_uneg = 1, id_sistema = idSistema, id_usuario = idUsuario)
         viewModel.setHoraServidorRequest()
     }
 

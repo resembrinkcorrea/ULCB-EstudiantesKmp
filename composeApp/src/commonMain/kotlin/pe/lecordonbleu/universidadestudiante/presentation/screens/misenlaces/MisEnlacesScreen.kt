@@ -38,7 +38,7 @@ fun MisEnlacesScreen(
 ) {
     val colors = getColorsTheme()
     val settings = getSettingsStorage()
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = settings.getInt("id_uneg", 1)
     val idSistema = settings.getInt("idSistema", 0)
 
     var enlaces by remember { mutableStateOf<List<ListLinksInstitucional>>(emptyList()) }

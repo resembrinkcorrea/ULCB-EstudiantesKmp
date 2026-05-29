@@ -48,7 +48,7 @@ fun MarcarAsistenciaScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val colors = getColorsTheme()
     val settings = getSettingsStorage()
-    val uneg = settings.getInt("id_uneg", 2)
+    val uneg = settings.getInt("id_uneg", 1)
     val idEstudPe = settings.getInt("idEstudPe", 0)
     val idServ = settings.getInt("idServ", 0)
     val idUsuario = settings.getInt("idUsuario", 0)

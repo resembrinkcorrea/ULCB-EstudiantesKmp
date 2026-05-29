@@ -120,10 +120,10 @@ fun ConvalidacionScreen(
                         convalidacionViewModel.resetSedeConvalidacionState()
                         convalidacionViewModel.resetCarrerasConvalidacionState()
                         convalidacionViewModel.resetCursosConvalidacionState()
-                        convalidacionViewModel.setTipoTrasladoRequest(id_uneg = 2)
+                        convalidacionViewModel.setTipoTrasladoRequest(id_uneg = 1)
                     },
                     enabled = listPlanes.isNotEmpty(),
-                    backgroundColorComboBox = colors.primary
+                    backgroundColorComboBox = colors.colorNaranjaOscuro
                 )
             }
 
@@ -147,12 +147,12 @@ fun ConvalidacionScreen(
                         convalidacionViewModel.resetCursosConvalidacionState()
                         convalidacionViewModel.setEstudianteOAcadConvalidacionRequest(
                             condicion = 1,
-                            id_uneg = 2,
+                            id_uneg = 1,
                             id_tipo_traslado = it.id_tipo_traslado
                         )
                     },
                     enabled = listTipos.isNotEmpty(),
-                    backgroundColorComboBox = colors.primary
+                    backgroundColorComboBox = colors.colorNaranjaOscuro
                 )
             }
 
@@ -173,12 +173,12 @@ fun ConvalidacionScreen(
                         convalidacionViewModel.resetCursosConvalidacionState()
                         convalidacionViewModel.setSedeConvalidacionRequest(
                             condicion = 2,
-                            id_uneg = 2,
+                            id_uneg = 1,
                             id_tipo_traslado = selectedTipo?.id_tipo_traslado ?: 0
                         )
                     },
                     enabled = listOfertas.isNotEmpty(),
-                    backgroundColorComboBox = colors.primary
+                    backgroundColorComboBox = colors.colorNaranjaOscuro
                 )
             }
 
@@ -200,7 +200,7 @@ fun ConvalidacionScreen(
                         }
                     },
                     enabled = listSedes.isNotEmpty(),
-                    backgroundColorComboBox = colors.colorNaranjaOscuro
+                    backgroundColorComboBox = colors.primary
                 )
             }
 
@@ -223,7 +223,7 @@ fun ConvalidacionScreen(
                         }
                     },
                     enabled = listCarreras.isNotEmpty(),
-                    backgroundColorComboBox = colors.colorNaranjaOscuro
+                    backgroundColorComboBox = colors.primary
                 )
             }
 
@@ -306,7 +306,7 @@ fun ConvalidacionScreen(
             if (!autoPlan && listPlanes.isNotEmpty()) {
                 autoPlan = true
                 selectedPlan = listPlanes.first()
-                convalidacionViewModel.setTipoTrasladoRequest(id_uneg = 2)
+                convalidacionViewModel.setTipoTrasladoRequest(id_uneg = 1)
             }
         }
         else -> listPlanes = emptyList()
@@ -320,7 +320,7 @@ fun ConvalidacionScreen(
                 selectedTipo = listTipos.first()
                 convalidacionViewModel.setEstudianteOAcadConvalidacionRequest(
                     condicion = 1,
-                    id_uneg = 2,
+                    id_uneg = 1,
                     id_tipo_traslado = selectedTipo!!.id_tipo_traslado
                 )
             }
@@ -336,7 +336,7 @@ fun ConvalidacionScreen(
                 selectedOferta = listOfertas.first()
                 convalidacionViewModel.setSedeConvalidacionRequest(
                     condicion = 2,
-                    id_uneg = 2,
+                    id_uneg = 1,
                     id_tipo_traslado = selectedTipo?.id_tipo_traslado ?: 0
                 )
             }

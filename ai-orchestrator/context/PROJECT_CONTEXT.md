@@ -27,6 +27,11 @@
 
 | FichaMatricula | 100% | Botón visible en HomeScreen cuando id_proce_mat == 1. Llama generarPdfPreMatApp (GeneralControlClaseServlet). Respuesta ByteArray abierta con expect/actual openPdfFromBytes (Android: FileProvider + ACTION_VIEW, iOS: NSData + UIApplication). FileProvider declarado en AndroidManifest con file_paths.xml (cache-path). |
 
+| Assets Android | 100% | Ícono de app (android:icon / android:roundIcon) reemplazado por ulcb_logo_ico.webp en 5 densidades. Adaptive icon XMLs eliminados. |
+| Assets Carrusel | 100% | Imágenes del OnBoarding reemplazadas por unicampus_9/2/3 del nativo. CarruselLogos: logo_ilcb_1 → logo_ulcb_anniversary, logo_ilcb_2 → ulcb_logo (del nativo). |
+| Drawer | 100% | Logo cabecera reemplazado por ulcb_logo_white (Image con ContentScale.Fit, fillMaxWidth 0.85f, height 160dp). |
+| Convalidaciones | 100% | Completo. |
+
 ## Pendientes conocidos
 - Notas: confirmar si nota_min aplica también para colorear notas en TareasAcademicas, Evaluacion Parcial y Final — definir colores aprobado/desaprobado cuando se tenga la regla de negocio
 - DetalleAsistencia: completar el 30% restante

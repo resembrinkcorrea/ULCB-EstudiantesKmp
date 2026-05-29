@@ -173,7 +173,7 @@ fun CustomDialogConfirmPago(
                             color = IlcbNaranjaDorado.copy(alpha = 0.15f)
                         ) {
                             Text(
-                                text = "ILCB Cuenta Corriente",
+                                text = "ULCB Cuenta Corriente",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.SemiBold,
                                 color = IlcbNaranjaDorado,

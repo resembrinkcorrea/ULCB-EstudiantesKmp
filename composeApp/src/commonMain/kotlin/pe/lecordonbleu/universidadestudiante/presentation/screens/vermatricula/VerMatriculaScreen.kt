@@ -65,7 +65,7 @@ fun VerMatriculaScreen(
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = settings.getInt("id_uneg", 1)
 
     val uiStateProyeccion by viewModel.uiStateProyeccion.collectAsStateWithLifecycle()
     val uiStateCarrera by viewModel.uiStateCarrera.collectAsStateWithLifecycle()

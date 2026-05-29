@@ -26,7 +26,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val title = message.notification?.title
             ?: message.data["title"]
-            ?: "ILCB Intranet"
+            ?: "ULCB Intranet"
         val body = message.notification?.body
             ?: message.data["body"]
             ?: ""
@@ -70,10 +70,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "ILCB Intranet",
+                "ULCB Intranet",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "Notificaciones de ILCB Intranet"
+                description = "Notificaciones de ULCB Intranet"
                 enableVibration(true)
             }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

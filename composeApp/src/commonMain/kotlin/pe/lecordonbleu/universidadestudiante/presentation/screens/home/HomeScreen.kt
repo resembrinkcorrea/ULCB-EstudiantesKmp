@@ -165,7 +165,7 @@ fun HomeScreen(
 
     LaunchedEffect(idSistema, idPerfil) {
         viewModel.fetchProyeccionValidacion(idEstud)
-        viewModel.setUserMenuRequest(2, idSistema, idPerfil)
+        viewModel.setUserMenuRequest(1, idSistema, idPerfil)
 
 
         if (idEstud > 0 && !token.isNullOrEmpty() && token != tokenGuardado) {
@@ -298,7 +298,7 @@ fun HomeScreen(
                             val diaName = dias[now.dayOfWeek.ordinal]
                             val fechaFormateada = "${diaName.replaceFirstChar { it.uppercase() }}, ${now.dayOfMonth} de ${meses[now.monthNumber - 1]} de ${now.year}"
                             viewModel.setFichaMatr(
-                                idUNEG = 2,
+                                idUNEG = 1,
                                 idPeriodoAcademico = settingsStorage.getInt("idPerAcad", 0).toString(),
                                 personaNombre = settingsStorage.getString("persNombre", "").orEmpty(),
                                 personaPaterno = settingsStorage.getString("persApellidoPat", "").orEmpty(),

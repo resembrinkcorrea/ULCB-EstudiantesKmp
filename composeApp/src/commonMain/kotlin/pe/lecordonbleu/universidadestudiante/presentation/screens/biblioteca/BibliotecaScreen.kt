@@ -54,7 +54,7 @@ fun BibliotecaScreen(
     val settings = getSettingsStorage()
     val context = getPlatformContext()
 
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = settings.getInt("id_uneg", 1)
     val idTipoUsuario = settings.getInt("idTipoUsuario", 0)
     val tabs = listOf("Bases de Datos", "Recursos Adicionales")
     val pagerState = rememberPagerState(pageCount = { tabs.size })
