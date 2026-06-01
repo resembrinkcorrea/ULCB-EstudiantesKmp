@@ -8,7 +8,7 @@ import com.google.firebase.database.ValueEventListener
 actual fun getStoreUpdateUrl(): String =
     "https://play.google.com/store/apps/details?id=pe.lecordonbleu.universidadestudiante"
 
-actual fun getFirebaseVersionUrl(): String = "Update Android ILCB"
+actual fun getFirebaseVersionUrl(): String = "Update Android ULCB"
 
 actual fun fetchFirebaseVersion(onVersion: (String) -> Unit): () -> Unit {
     val ref = FirebaseDatabase.getInstance().getReference(getFirebaseVersionUrl())

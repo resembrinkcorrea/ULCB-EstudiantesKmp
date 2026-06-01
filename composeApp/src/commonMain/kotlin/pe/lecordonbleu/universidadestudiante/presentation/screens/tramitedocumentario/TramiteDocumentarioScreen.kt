@@ -51,6 +51,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import pe.lecordonbleu.universidadestudiante.LoadingIndicator
+import pe.lecordonbleu.universidadestudiante.SettingsStorage
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CarreraRemote
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CorreccionDocumentos
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.EstadoTramite
@@ -82,6 +83,7 @@ fun TramiteDocumentarioScreen(
     val settings = getSettingsStorage()
     val idUsuario = settings.getInt("idUsuario", settings.getInt("id_usuario", 0))
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
+    val idSistema = settings.getInt("idSistema", 0)
     val idUneg = settings.getInt("id_uneg", 1)
     val idEstud = settings.getInt("idEstud", 0)
 
@@ -312,7 +314,7 @@ fun TramiteDocumentarioScreen(
                                 idTramiteEstud = id.toIntOrNull() ?: 0,
                                 idTramiteDt = itemSeleccionado.id_tramite.toIntOrNull() ?: 0,
                                 idTipoServa = idTipoServa ?: 0,
-                                id_sistema = 13,
+                                id_sistema = idSistema,
                                 cantidadMultiple = 0,
                                 id_pest_det = idPestDet ?: 0,
                                 id_estud_pe = idEstudPe,
@@ -333,7 +335,7 @@ fun TramiteDocumentarioScreen(
                             idTramiteEstud = tramite.id_tramite_estud.toIntOrNull() ?: 0,
                             idTramiteDt = tramite.id_tramite.toIntOrNull() ?: 0,
                             idTipoServa = 0,
-                            id_sistema = 13,
+                            id_sistema = idSistema,
                             cantidadMultiple = 0,
                             id_pest_det = 0,
                             id_estud_pe = 0,
@@ -344,7 +346,7 @@ fun TramiteDocumentarioScreen(
                         if (textoCorregido.isNotBlank()) {
                             viewModel.setCorreccionTramiteSaveRequest(
                                 descripcion = textoCorregido,
-                                id_sistema = 13,
+                                id_sistema = idSistema,
                                 id_tramite = tramite.id_tramite.toIntOrNull() ?: 0,
                                 id_usuario = idUsuario,
                                 id_tipo_usuario = idTipoUsuario,
@@ -389,7 +391,7 @@ fun TramiteDocumentarioScreen(
                         idTramiteEstud = 0,
                         idTramiteDt = 0,
                         idTipoServa = it.id_tiposerva.toIntOrNull() ?: 0,
-                        id_sistema = 13,
+                        id_sistema = idSistema,
                         cantidadMultiple = 0,
                         id_pest_det = it.id_pest_det.toIntOrNull() ?: 0,
                         id_estud_pe = 0,
@@ -397,7 +399,7 @@ fun TramiteDocumentarioScreen(
                     )
                     viewModel.setDocumentosCreadosRequest(
                         idTramite = selectedTramite?.id?.toIntOrNull() ?: 0,
-                        idSistema = 13,
+                        idSistema = idSistema,
                         idEstado = selectedEstado?.id_paragene?.toIntOrNull() ?: 0,
                         fechaInicio = fechaInicio,
                         idUsuario = idUsuario,

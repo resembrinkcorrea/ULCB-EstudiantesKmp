@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ContenidoTags
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.TagsCompartidosEstudiante
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
@@ -58,7 +59,7 @@ fun ArchivosCompartidosScreen(
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
-    val idUneg = settings.getInt("id_uneg", 2)
+    val idUneg = Constantes.ID_UNEG
 
     val uiStateListaServicio by viewModel.uiStateListaServicio.collectAsStateWithLifecycle()
     val uiStateTipoServicio by viewModel.uiStateTipoServicio.collectAsStateWithLifecycle()

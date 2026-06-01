@@ -18,7 +18,7 @@ private data class ConfigEntorno(
 
 object Constantes {
 
-    private val entornoActual = Entorno.DESARROLLO
+    private val entornoActual = Entorno.PRODUCCION
 
     private val config = when (entornoActual) {
         Entorno.DESARROLLO -> ConfigEntorno(
@@ -67,8 +67,9 @@ object Constantes {
     //val RECIPIENT_DOMAIN = "ILP"
     var RECIPIENT_DOMAIN = "LEP" //Universidad
 
-    val ID_SISTEMA = 23 //Universidad 23 - Instituto 24 - Android
     val BASE_UNEG = "ulcb"
+    
+    val ID_UNEG = 1 //Universidad 1 - Instituto 2
 
     val ENV_DOMAIN = config.envDomain  //cuenta corriente
 

@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
+import pe.lecordonbleu.universidadestudiante.SettingsStorage
 import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Carrera
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListDetMatric
@@ -66,6 +68,7 @@ fun VerMatriculaScreen(
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
     val idUneg = settings.getInt("id_uneg", 1)
+    val idSistema = settings.getInt("idSistema", 0)
 
     val uiStateProyeccion by viewModel.uiStateProyeccion.collectAsStateWithLifecycle()
     val uiStateCarrera by viewModel.uiStateCarrera.collectAsStateWithLifecycle()
@@ -94,6 +97,7 @@ fun VerMatriculaScreen(
     LaunchedEffect(Unit) {
         viewModel.setProyeccion(idEstud)
     }
+
 
     // ─── 2. UI ────────────────────────────────────────────────────────────────
     Scaffold(
@@ -139,7 +143,7 @@ fun VerMatriculaScreen(
                                     carrera.id_serv.toIntOrNull() ?: 0,
                                     carrera.id_pest_det.toIntOrNull() ?: 0,
                                     idEstud,
-                                    Constantes.ID_SISTEMA,
+                                    idSistema,
                                     idUneg,
                                     idUsuario
                                 )
@@ -257,7 +261,7 @@ fun VerMatriculaScreen(
                         primera.id_serv.toIntOrNull() ?: 0,
                         primera.id_pest_det.toIntOrNull() ?: 0,
                         idEstud,
-                        Constantes.ID_SISTEMA,
+                        idSistema,
                         idUneg,
                         idUsuario
                     )

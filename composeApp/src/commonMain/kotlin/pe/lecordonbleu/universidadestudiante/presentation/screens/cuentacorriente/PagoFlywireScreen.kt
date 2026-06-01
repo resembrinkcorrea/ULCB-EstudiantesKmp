@@ -23,7 +23,6 @@ fun PagoFlywireScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val url = "${Constantes.RETURN_DOMAIN}.${Constantes.BASE_UNEG}.edu.pe/pages/$codTransaccion"
-
     fun volver() {
         navigator.navigate("/$rutaRetorno", navOptions {
             popUpTo("/$rutaRetorno") { inclusive = true }

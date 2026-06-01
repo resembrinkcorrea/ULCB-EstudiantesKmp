@@ -58,7 +58,7 @@ actual fun WebViewComposable(
                         handler: SslErrorHandler?,
                         error: SslError?
                     ) {
-                        handler?.cancel()
+                        handler?.proceed()
                     }
                 }
                 loadUrl(url)

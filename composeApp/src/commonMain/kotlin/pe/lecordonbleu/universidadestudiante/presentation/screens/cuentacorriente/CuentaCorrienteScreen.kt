@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -96,7 +97,7 @@ fun CuentaCorrienteScreen(
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
-    val idUneg = settings.getInt("id_uneg", 1)
+    val idUneg = Constantes.ID_UNEG
 
     val uiStateServicio by viewModel.uiStateServicio.collectAsStateWithLifecycle()
     val uiStatePeriodo by viewModel.uiStatePeriodo.collectAsStateWithLifecycle()
@@ -193,6 +194,7 @@ fun CuentaCorrienteScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .navigationBarsPadding()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {

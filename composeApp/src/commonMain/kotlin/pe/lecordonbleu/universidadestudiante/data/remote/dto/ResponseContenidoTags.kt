@@ -23,7 +23,7 @@ data class ContenidoTags(
     val ruta_carpeta: String,
     val tamanio_mostrar_mas: Int,
     val flag_leido: Int,
-    val flag_obligatorio: Int,
+    val flag_obligatorio: Int? = null,
     val id_oferta_carpeta_det: Int,
     val id_oferta_carpeta_docu: Int
 )
