@@ -342,7 +342,7 @@ fun HomeScreen(
                                 "MIS AVISOS" -> {
                                     navigator.navigate("/misavisos")
                                 }
-                                "VER BOUTIQUE" -> openUrl(platformContext, "https://ecommerce.ilcb.edu.pe/pages/")
+                                "VER BOUTIQUE" -> openUrl(platformContext, "https://ecommerce.ulcb.edu.pe/pages/")
                             }
                         },
                         onNavigate = { route -> navigator.navigate(route) }

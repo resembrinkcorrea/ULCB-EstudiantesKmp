@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6DDB518F9E1C9D0FFF1EF96B /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A1694EF8C0995A8139739E /* Pods_iosApp.framework */; };
+		137397B5CA4692DC54698F19 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2A6F08800B7DD94025DDFD3B /* ULCBIntranetKmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ULCBIntranetKmp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		98A1694EF8C0995A8139739E /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8AAC2BC842EB3C4C3922FB3 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
-		BCD675F897BBCB09D8E72124 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
+		2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
+		6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -38,8 +38,6 @@
 		};
 		90689ACC623A1D3553515241 /* Configuration */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Configuration;
 			sourceTree = "<group>";
 		};
@@ -50,17 +48,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DDB518F9E1C9D0FFF1EF96B /* Pods_iosApp.framework in Frameworks */,
+				137397B5CA4692DC54698F19 /* Pods_iosApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E3A01FD2964C7D1E7F81779 /* Frameworks */ = {
+		11300874AA3CAF62EA4E2339 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				98A1694EF8C0995A8139739E /* Pods_iosApp.framework */,
+				6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -68,8 +66,8 @@
 		44C265322583C562CD329BF9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A8AAC2BC842EB3C4C3922FB3 /* Pods-iosApp.debug.xcconfig */,
-				BCD675F897BBCB09D8E72124 /* Pods-iosApp.release.xcconfig */,
+				EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */,
+				2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -89,7 +87,7 @@
 				24E2AFF474AF7106D5682264 /* iosApp */,
 				AE0AA0198FA4A3B957333C3A /* Products */,
 				44C265322583C562CD329BF9 /* Pods */,
-				0E3A01FD2964C7D1E7F81779 /* Frameworks */,
+				11300874AA3CAF62EA4E2339 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,12 +98,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 131099C4C5A44573F1CF2C15 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				BA37D0F54F4314873702611D /* [CP] Check Pods Manifest.lock */,
+				6095A55DF2C8812D51F2CD3D /* [CP] Check Pods Manifest.lock */,
 				062A2E5CAC6A918512937197 /* Sources */,
 				E1F3C4D3FDB897C723CCB477 /* Frameworks */,
 				6C7812FE2F737ED6002E6666 /* Copy Compose Resources */,
 				08E341E904AE4DF89803FC25 /* Resources */,
-				7949235A6A765BE98A51B06C /* [CP] Copy Pods Resources */,
+				61C9851B52F3EAD7BC77970D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -164,42 +162,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6C7812FE2F737ED6002E6666 /* Copy Compose Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Compose Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nSRC_DIR=\"$SRCROOT/../composeApp/build/compose/cocoapods/compose-resources\"\nDEST_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/compose-resources\"\n\nif [ -d \"$SRC_DIR\" ]; then\n  rm -rf \"$DEST_DIR\"\n  mkdir -p \"$DEST_DIR\"\n  cp -R \"$SRC_DIR/\" \"$DEST_DIR/\"\nfi\n";
-		};
-		7949235A6A765BE98A51B06C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BA37D0F54F4314873702611D /* [CP] Check Pods Manifest.lock */ = {
+		6095A55DF2C8812D51F2CD3D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -220,6 +183,45 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		61C9851B52F3EAD7BC77970D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C7812FE2F737ED6002E6666 /* Copy Compose Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Compose Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nSRC_DIR=\"$SRCROOT/../composeApp/build/compose/cocoapods/compose-resources\"\nDEST_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/compose-resources\"\n\nif [ -d \"$SRC_DIR\" ]; then\n  rm -rf \"$DEST_DIR\"\n  mkdir -p \"$DEST_DIR\"\n  cp -R \"$SRC_DIR/\" \"$DEST_DIR/\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -361,7 +363,7 @@
 		};
 		615E63A921433E45716A739B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BCD675F897BBCB09D8E72124 /* Pods-iosApp.release.xcconfig */;
+			baseConfigurationReference = 2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */;
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -369,7 +371,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 54;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2J78QM7BYV;
 				ENABLE_PREVIEWS = YES;
@@ -387,7 +389,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = pe.lecordonbleu.universidadestudiante;
 				PRODUCT_NAME = ULCBIntranetKmp;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -398,7 +400,7 @@
 		};
 		C09D653720F27FAC4F613BAC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8AAC2BC842EB3C4C3922FB3 /* Pods-iosApp.debug.xcconfig */;
+			baseConfigurationReference = EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -406,7 +408,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 54;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2J78QM7BYV;
 				ENABLE_PREVIEWS = YES;
@@ -424,7 +426,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = pe.lecordonbleu.universidadestudiante;
 				PRODUCT_NAME = ULCBIntranetKmp;
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -5,7 +5,7 @@ import cocoapods.FirebaseDatabase.FIRDataEventType
 import kotlinx.cinterop.ExperimentalForeignApi
 
 actual fun getStoreUpdateUrl(): String =
-    "itms-apps://itunes.apple.com/app/id6448765501"
+    "itms-apps://itunes.apple.com/app/id1661167886"
 actual fun getFirebaseVersionUrl(): String = "Update ULCB"
 
 @OptIn(ExperimentalForeignApi::class)

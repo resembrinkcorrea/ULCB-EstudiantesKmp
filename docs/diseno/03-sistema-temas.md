@@ -2,7 +2,7 @@
 
 ## Arquitectura del tema
 
-El tema se aplica desde `App.kt` → `AppTheme {}` → `IlcbTheme {}`.
+El tema se aplica desde `App.kt` → `AppTheme {}` → `UlcbTheme {}`.
 
 ```
 App.kt

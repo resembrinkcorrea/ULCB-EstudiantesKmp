@@ -9,12 +9,12 @@
 
 ## Módulos completados
 
-| Módulo | Estado | Descripción |
-|--------|--------|-------------|
-| **Onboarding** | Completado | Pantalla de bienvenida con carrusel de imágenes institucionales |
-| **Login** | Completado | Autenticación institucional (usuario + contraseña) y Microsoft SSO (MSAL) |
-| **Home** | Completado | Dashboard principal: menú de módulos, estado de asistencia, aula demo |
-| **Tema ILCB** | Completado | Sistema de colores MD3, tipografía, dark/light mode |
+| Módulo                | Estado | Descripción |
+|-----------------------|--------|-------------|
+| **Onboarding**        | Completado | Pantalla de bienvenida con carrusel de imágenes institucionales |
+| **Login**             | Completado | Autenticación institucional (usuario + contraseña) y Microsoft SSO (MSAL) |
+| **Home**              | Completado | Dashboard principal: menú de módulos, estado de asistencia, aula demo |
+| **Tema ULCB**         | Completado | Sistema de colores MD3, tipografía, dark/light mode |
 | **Arquitectura base** | Completado | Clean Architecture + MVVM, Koin, Ktor, repositorio centralizado |
 
 ---
