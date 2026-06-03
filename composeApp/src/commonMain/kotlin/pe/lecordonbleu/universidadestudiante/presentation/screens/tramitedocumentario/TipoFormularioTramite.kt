@@ -13,7 +13,7 @@ enum class TipoFormularioTramite {
                 in setOf(46, 87) -> E
                 in setOf(63, 62, 60, 57, 10, 11, 7, 8, 47, 52, 53, 41, 44) -> F
                 in setOf(124, 129) -> G
-                in setOf(54, 128) -> H
+                in setOf(54, 101, 128) -> H
                 in setOf(29, 51, 40) -> L
                 else -> DESCONOCIDO
             }

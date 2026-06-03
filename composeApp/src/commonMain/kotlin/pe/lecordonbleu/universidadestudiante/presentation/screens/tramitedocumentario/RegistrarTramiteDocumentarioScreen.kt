@@ -342,6 +342,10 @@ fun RegistrarTramiteDocumentarioScreen(
                         selectedTramite = opcionSeleccione
                         tipoEntregaList = emptyList()
                         selectedTipoEntrega = null
+                        modalidadList = emptyList()
+                        selectedModalidad = null
+                        idModalidad = 0
+                        modalidadHabilitada = false
                         requisitosList = emptyList()
                         requisitos = "NO"
                         monto = "0"
@@ -392,6 +396,10 @@ fun RegistrarTramiteDocumentarioScreen(
                     selectedTramite = tramiteSeleccionado
                     tipoEntregaList = emptyList()
                     selectedTipoEntrega = null
+                    modalidadList = emptyList()
+                    selectedModalidad = null
+                    idModalidad = 0
+                    modalidadHabilitada = false
                     requisitosList = emptyList()
                     requisitos = "NO"
                     monto = "0"
@@ -679,8 +687,24 @@ fun RegistrarTramiteDocumentarioScreen(
     when (val s = uiStateTTRFiltro) {
         is ResourceUiState.Success -> {
             val json = s.data
-            val ttrData1 = json["TTRData1"]?.jsonArray
-            val ttrItem = ttrData1?.firstOrNull()?.jsonObject
+
+            var ttrItem: kotlinx.serialization.json.JsonObject? = null
+            var entregaRaw: List<kotlinx.serialization.json.JsonObject> = emptyList()
+            var modalidadRaw: List<kotlinx.serialization.json.JsonObject> = emptyList()
+
+            for ((_, value) in json) {
+                val arr = runCatching { value.jsonArray }.getOrNull() ?: continue
+                val first = arr.firstOrNull()?.jsonObject ?: continue
+                when {
+                    first.containsKey("modal_presencial") ->
+                        entregaRaw = arr.mapNotNull { runCatching { it.jsonObject }.getOrNull() }
+                    first.containsKey("id_mod_sustentacion_det") ->
+                        modalidadRaw = arr.mapNotNull { runCatching { it.jsonObject }.getOrNull() }
+                    first.containsKey("tipo_tramite_nombre") ->
+                        ttrItem = first
+                }
+            }
+
             val requisitosJson = ttrItem?.get("requisitos")?.jsonPrimitive?.contentOrNull.orEmpty()
             val montoJson = ttrItem?.get("tg_valor")?.jsonPrimitive?.contentOrNull.orEmpty()
             val tipoTramiteJson =
@@ -710,30 +734,30 @@ fun RegistrarTramiteDocumentarioScreen(
                 )
             }
 
-            val entregaList = json["TTRData"]?.jsonArray?.mapNotNull { item ->
-                val obj = item.jsonObject
+            val entregaList = entregaRaw.map { obj ->
                 TipoEntrega(
                     contador = obj["contador"]?.jsonPrimitive?.intOrNull ?: 0,
                     modal_presencial = obj["modal_presencial"]?.jsonPrimitive?.contentOrNull.orEmpty(),
                     id = obj["id"]?.jsonPrimitive?.contentOrNull.orEmpty(),
                     nombre = obj["nombre"]?.jsonPrimitive?.contentOrNull.orEmpty()
                 )
-            }.orEmpty()
+            }
             tipoEntregaList = entregaList
             selectedTipoEntrega =
                 entregaList.find { it.id == selectedTipoEntrega?.id } ?: entregaList.firstOrNull()
             idTipoEntrega = selectedTipoEntrega?.id?.toIntOrNull() ?: 0
             modalPresencial = selectedTipoEntrega?.modal_presencial?.toIntOrNull() ?: 0
 
-            val modList =json ["TTRData3"]?.jsonArray?.mapNotNull { item ->
-                val obj = item.jsonObject
+            val modList = modalidadRaw.map { obj ->
                 Modalidad(
                     id = obj["id"]?.jsonPrimitive?.contentOrNull.orEmpty(),
                     nombre = obj["nombre"]?.jsonPrimitive?.contentOrNull.orEmpty()
                 )
-            }.orEmpty()
-
+            }
             modalidadList = modList
+            modalidadHabilitada = modList.isNotEmpty()
+            selectedModalidad = modList.firstOrNull()
+            idModalidad = selectedModalidad?.id?.toIntOrNull() ?: 0
 
             requisitos = if (stripHtml(requisitosJson).isBlank()) "NO" else "SI"
             monto = stripHtml(montoJson).ifBlank { "0" }
@@ -955,7 +979,7 @@ fun RegistrarTramiteDocumentarioScreen(
                                     datosRecojo.recoger.takeIf { it >= 0 }?.toString().orEmpty(),
                                     if (datosRecojo.recoger == 0) datosRecojo.dni else "",
                                     if (datosRecojo.recoger == 0) datosRecojo.nombres else "",
-                                    flagPago.toString(), "0", "0", idTipoTramiteDT.toString(), monto, "0"
+                                    flagPago.toString(), "0", "0", idTipoTramiteDT.toString(), monto, idModalidad.toString()
                                 ).joinToString("#")
                                 val request = construirTemporalTramiteRequest(
                                     callbackId = callbackId, monto = monto,
@@ -1086,7 +1110,7 @@ fun RegistrarTramiteDocumentarioScreen(
                             datosRecojo.recoger.takeIf { it >= 0 }?.toString().orEmpty(),
                             if (datosRecojo.recoger == 0) datosRecojo.dni else "",
                             if (datosRecojo.recoger == 0) datosRecojo.nombres else "",
-                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, "0"
+                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, idModalidad.toString()
                         ).joinToString("#")
                         val request = construirTemporalTramiteRequest(
                             callbackId = callbackId, monto = monto,
@@ -1156,7 +1180,7 @@ fun RegistrarTramiteDocumentarioScreen(
                             datosRecojo.recoger.takeIf { it >= 0 }?.toString().orEmpty(),
                             if (datosRecojo.recoger == 0) datosRecojo.dni else "",
                             if (datosRecojo.recoger == 0) datosRecojo.nombres else "",
-                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, "0"
+                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, idModalidad.toString()
                         ).joinToString("#")
                         val request = construirTemporalTramiteRequest(
                             callbackId = callbackId, monto = monto,
@@ -1226,7 +1250,7 @@ fun RegistrarTramiteDocumentarioScreen(
                             datosRecojo.recoger.takeIf { it >= 0 }?.toString().orEmpty(),
                             if (datosRecojo.recoger == 0) datosRecojo.dni else "",
                             if (datosRecojo.recoger == 0) datosRecojo.nombres else "",
-                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, "0"
+                            flagPago.toString(), "0", idReqTemp.toString(), idTipoTramiteDT.toString(), monto, idModalidad.toString()
                         ).joinToString("#")
                         val request = construirTemporalTramiteRequest(
                             callbackId = callbackId, monto = monto,
