@@ -56,6 +56,7 @@ import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CarreraRemote
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListPaises
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListPerfilEstudiante
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.Modalidad
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.TipoEntrega
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Tramite
 import pe.lecordonbleu.universidadestudiante.domain.model.DuplicadoTituloGuardarRequest
@@ -100,7 +101,8 @@ fun RegistrarTramiteDocumentarioScreen(
     val colors = getColorsTheme()
     val focusManager = LocalFocusManager.current
     val settings = getSettingsStorage()
-    val idSistema = settings.getInt("idSistema", 0)
+    //val idSistema = settings.getInt("idSistema", 0)
+    val idSistema = 3  // universidad 3 , instituto 13
     val idUneg = settings.getInt("id_uneg", 1)
     val idEstud = settings.getInt("idEstud", 0)
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
@@ -138,7 +140,11 @@ fun RegistrarTramiteDocumentarioScreen(
 
     var perfilEstudiante by remember { mutableStateOf<ListPerfilEstudiante?>(null) }
     var selectedTramite by remember { mutableStateOf(opcionSeleccione) }
-    var selectedModalidad by remember { mutableStateOf(modalidades.firstOrNull() ?: "Seleccionar") }
+
+    var modalidadList by remember { mutableStateOf(emptyList<Modalidad>()) }
+    var selectedModalidad by remember { mutableStateOf<Modalidad?>(null) }
+    var idModalidad by remember { mutableStateOf(0) }
+
     var motivo by remember { mutableStateOf("") }
     var fechaSolicitante by remember { mutableStateOf("") }
     var requisitos by remember { mutableStateOf("NO") }
@@ -464,11 +470,12 @@ fun RegistrarTramiteDocumentarioScreen(
                         enabled = tipoEntregaList.isNotEmpty()
                     )
                     AppDropdownMenu(
-                        items = modalidades,
+                        items = modalidadList,
                         selectedItem = selectedModalidad,
                         label = "Modalidad",
-                        itemLabel = { it },
-                        onItemSelected = { selectedModalidad = it },
+                        itemLabel = { it.nombre},
+                        onItemSelected = { selectedModalidad = it
+                                         idModalidad = it.id.toIntOrNull() ?: 0},
                         enabled = modalidadHabilitada
                     )
                 }
@@ -717,6 +724,17 @@ fun RegistrarTramiteDocumentarioScreen(
                 entregaList.find { it.id == selectedTipoEntrega?.id } ?: entregaList.firstOrNull()
             idTipoEntrega = selectedTipoEntrega?.id?.toIntOrNull() ?: 0
             modalPresencial = selectedTipoEntrega?.modal_presencial?.toIntOrNull() ?: 0
+
+            val modList =json ["TTRData3"]?.jsonArray?.mapNotNull { item ->
+                val obj = item.jsonObject
+                Modalidad(
+                    id = obj["id"]?.jsonPrimitive?.contentOrNull.orEmpty(),
+                    nombre = obj["nombre"]?.jsonPrimitive?.contentOrNull.orEmpty()
+                )
+            }.orEmpty()
+
+            modalidadList = modList
+
             requisitos = if (stripHtml(requisitosJson).isBlank()) "NO" else "SI"
             monto = stripHtml(montoJson).ifBlank { "0" }
             tipoTramite = stripHtml(tipoTramiteJson)

@@ -44,3 +44,10 @@ data class TipoEntrega(
     val id: String,
     val nombre: String
 )
+
+
+@Serializable
+data class Modalidad(
+    val id: String,
+    val nombre: String
+)

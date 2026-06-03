@@ -314,7 +314,7 @@ fun TramiteDocumentarioScreen(
                                 idTramiteEstud = id.toIntOrNull() ?: 0,
                                 idTramiteDt = itemSeleccionado.id_tramite.toIntOrNull() ?: 0,
                                 idTipoServa = idTipoServa ?: 0,
-                                id_sistema = idSistema,
+                                id_sistema = 3, //universidad = 3, instituto 13
                                 cantidadMultiple = 0,
                                 id_pest_det = idPestDet ?: 0,
                                 id_estud_pe = idEstudPe,
@@ -335,7 +335,7 @@ fun TramiteDocumentarioScreen(
                             idTramiteEstud = tramite.id_tramite_estud.toIntOrNull() ?: 0,
                             idTramiteDt = tramite.id_tramite.toIntOrNull() ?: 0,
                             idTipoServa = 0,
-                            id_sistema = idSistema,
+                            id_sistema = 3,
                             cantidadMultiple = 0,
                             id_pest_det = 0,
                             id_estud_pe = 0,
@@ -346,7 +346,7 @@ fun TramiteDocumentarioScreen(
                         if (textoCorregido.isNotBlank()) {
                             viewModel.setCorreccionTramiteSaveRequest(
                                 descripcion = textoCorregido,
-                                id_sistema = idSistema,
+                                id_sistema = 3,
                                 id_tramite = tramite.id_tramite.toIntOrNull() ?: 0,
                                 id_usuario = idUsuario,
                                 id_tipo_usuario = idTipoUsuario,
@@ -391,7 +391,7 @@ fun TramiteDocumentarioScreen(
                         idTramiteEstud = 0,
                         idTramiteDt = 0,
                         idTipoServa = it.id_tiposerva.toIntOrNull() ?: 0,
-                        id_sistema = idSistema,
+                        id_sistema = 3,
                         cantidadMultiple = 0,
                         id_pest_det = it.id_pest_det.toIntOrNull() ?: 0,
                         id_estud_pe = 0,
@@ -399,7 +399,7 @@ fun TramiteDocumentarioScreen(
                     )
                     viewModel.setDocumentosCreadosRequest(
                         idTramite = selectedTramite?.id?.toIntOrNull() ?: 0,
-                        idSistema = idSistema,
+                        idSistema = 3,
                         idEstado = selectedEstado?.id_paragene?.toIntOrNull() ?: 0,
                         fechaInicio = fechaInicio,
                         idUsuario = idUsuario,
