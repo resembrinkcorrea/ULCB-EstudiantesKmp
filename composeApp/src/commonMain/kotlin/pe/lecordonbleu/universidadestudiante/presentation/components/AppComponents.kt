@@ -432,6 +432,7 @@ fun StandardTopBar(
     titleFontSize: TextUnit = 18.sp
 ) {
     val colors = getColorsTheme()
+    val navigating = remember { mutableStateOf(false) }
 
     TopAppBar(
         modifier = Modifier
@@ -458,7 +459,14 @@ fun StandardTopBar(
                 )
             },
         navigationIcon = {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = {
+                    if (!navigating.value) {
+                        navigating.value = true
+                        onBackClick()
+                    }
+                }
+            ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Volver",

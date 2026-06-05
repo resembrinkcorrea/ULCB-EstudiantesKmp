@@ -125,8 +125,8 @@ android {
         applicationId = "pe.lecordonbleu.universidadestudiante"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 69
-        versionName = "1.6.3"
+        versionCode = 70
+        versionName = "1.6.4"
     }
     packaging {
         resources {

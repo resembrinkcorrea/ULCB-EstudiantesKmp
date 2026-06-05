@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		137397B5CA4692DC54698F19 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */; };
+		6CE7D6CC648881913416D839 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E0C6D3E1044D4AC6E5B2FA /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2A6F08800B7DD94025DDFD3B /* ULCBIntranetKmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ULCBIntranetKmp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
-		6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		B2486A1227672A83661F90E3 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		B7E0C6D3E1044D4AC6E5B2FA /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6A5AEC1A3B7DBF2E5498CC6 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		9EA656723D6194CF8BF77CC6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		9EA656723D6194CF8BF77CC6 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -31,7 +31,7 @@
 		24E2AFF474AF7106D5682264 /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				9EA656723D6194CF8BF77CC6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				9EA656723D6194CF8BF77CC6 /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -48,28 +48,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				137397B5CA4692DC54698F19 /* Pods_iosApp.framework in Frameworks */,
+				6CE7D6CC648881913416D839 /* Pods_iosApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11300874AA3CAF62EA4E2339 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6D8B59F5843C65596A43EE6B /* Pods_iosApp.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		44C265322583C562CD329BF9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */,
-				2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */,
+				B2486A1227672A83661F90E3 /* Pods-iosApp.debug.xcconfig */,
+				F6A5AEC1A3B7DBF2E5498CC6 /* Pods-iosApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		A3979C84085D985F5DF91A95 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B7E0C6D3E1044D4AC6E5B2FA /* Pods_iosApp.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AE0AA0198FA4A3B957333C3A /* Products */ = {
@@ -87,7 +87,7 @@
 				24E2AFF474AF7106D5682264 /* iosApp */,
 				AE0AA0198FA4A3B957333C3A /* Products */,
 				44C265322583C562CD329BF9 /* Pods */,
-				11300874AA3CAF62EA4E2339 /* Frameworks */,
+				A3979C84085D985F5DF91A95 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,12 +98,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 131099C4C5A44573F1CF2C15 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				6095A55DF2C8812D51F2CD3D /* [CP] Check Pods Manifest.lock */,
+				552047E586CF7EACF829C4BE /* [CP] Check Pods Manifest.lock */,
 				062A2E5CAC6A918512937197 /* Sources */,
 				E1F3C4D3FDB897C723CCB477 /* Frameworks */,
 				6C7812FE2F737ED6002E6666 /* Copy Compose Resources */,
 				08E341E904AE4DF89803FC25 /* Resources */,
-				61C9851B52F3EAD7BC77970D /* [CP] Copy Pods Resources */,
+				5837DB3686168C777DCF40A7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -162,7 +162,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6095A55DF2C8812D51F2CD3D /* [CP] Check Pods Manifest.lock */ = {
+		552047E586CF7EACF829C4BE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -184,7 +184,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		61C9851B52F3EAD7BC77970D /* [CP] Copy Pods Resources */ = {
+		5837DB3686168C777DCF40A7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -363,7 +363,7 @@
 		};
 		615E63A921433E45716A739B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2DFC590A04DDE9AE056518F6 /* Pods-iosApp.release.xcconfig */;
+			baseConfigurationReference = F6A5AEC1A3B7DBF2E5498CC6 /* Pods-iosApp.release.xcconfig */;
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -371,7 +371,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2J78QM7BYV;
 				ENABLE_PREVIEWS = YES;
@@ -389,7 +389,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pe.lecordonbleu.universidadestudiante;
 				PRODUCT_NAME = ULCBIntranetKmp;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -400,7 +400,7 @@
 		};
 		C09D653720F27FAC4F613BAC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EA3A60C30B39A75D1AE81125 /* Pods-iosApp.debug.xcconfig */;
+			baseConfigurationReference = B2486A1227672A83661F90E3 /* Pods-iosApp.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -408,7 +408,7 @@
 				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2J78QM7BYV;
 				ENABLE_PREVIEWS = YES;
@@ -426,7 +426,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pe.lecordonbleu.universidadestudiante;
 				PRODUCT_NAME = ULCBIntranetKmp;
 				SWIFT_EMIT_LOC_STRINGS = YES;
