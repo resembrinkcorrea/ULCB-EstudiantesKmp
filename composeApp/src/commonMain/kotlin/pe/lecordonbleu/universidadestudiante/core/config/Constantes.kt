@@ -18,7 +18,7 @@ private data class ConfigEntorno(
 
 object Constantes {
 
-    private val entornoActual = Entorno.PREPRODUCCION
+    private val entornoActual = Entorno.PRODUCCION
 
     private val config = when (entornoActual) {
         Entorno.DESARROLLO -> ConfigEntorno(

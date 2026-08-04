@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListDetMatric
+import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogBasic
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListVerMatric
 import pe.lecordonbleu.universidadestudiante.domain.model.MatriculaBody
 import pe.lecordonbleu.universidadestudiante.domain.model.MatriculaDetalleItem
@@ -76,12 +77,13 @@ fun GuardarMatriculaTab(
     val deseleccionados = remember { mutableStateMapOf<String, Boolean>() }
     var expandedCursoId by remember { mutableStateOf<String?>(null) }
     var showHorario by remember { mutableStateOf(false) }
+    var showMaxCredDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
     val selectedCreditos = cursosList
         .filter { !deseleccionados.containsKey(it.id_oacad_det) && (selectedSecciones.containsKey(it.id_oacad_det) || it.oad_seccion_nombre.isNotEmpty()) }
         .sumOf { it.cant_tot_cred.toIntOrNull() ?: 0 }
-    val maxCred = cursosList.firstOrNull()?.max_cred ?: "-"
+    val maxCred = cursosList.firstOrNull()?.max_cred ?: 0
 
     val peracadNombre = cursosList.firstOrNull()?.peracad_nombre ?: ""
 
@@ -249,19 +251,23 @@ fun GuardarMatriculaTab(
 
         Button(
             onClick = {
-                val items = buildMatriculaItems(
-                    cursosList = cursosList.filter { !deseleccionados.containsKey(it.id_oacad_det) },
-                    selectedSecciones = selectedSecciones,
-                    selectedCreditos = selectedCreditos,
-                    idEstud = idEstud,
-                    idServ = idServ,
-                    idPestDet = idPestDet,
-                    idUneg = idUneg,
-                    idUsuario = idUsuario,
-                    idTipmatric = idTipmatric,
-                    estadoIngresante = estadoIngresante
-                )
-                onMatricularClick(MatriculaBody(items))
+                if (selectedCreditos <= maxCred) {
+                    val items = buildMatriculaItems(
+                        cursosList = cursosList.filter { !deseleccionados.containsKey(it.id_oacad_det) },
+                        selectedSecciones = selectedSecciones,
+                        selectedCreditos = selectedCreditos,
+                        idEstud = idEstud,
+                        idServ = idServ,
+                        idPestDet = idPestDet,
+                        idUneg = idUneg,
+                        idUsuario = idUsuario,
+                        idTipmatric = idTipmatric,
+                        estadoIngresante = estadoIngresante
+                    )
+                    onMatricularClick(MatriculaBody(items))
+                } else {
+                    showMaxCredDialog = true
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -278,6 +284,17 @@ fun GuardarMatriculaTab(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
+    }
+
+    if (showMaxCredDialog) {
+        CustomDialogBasic(
+            visible = true,
+            titulo = "Matricula",
+            mensaje = "Excede el máximo de créditos permitidos ($maxCred).",
+            flag_val = 0,
+            confirmado = false,
+            onDismiss = { showMaxCredDialog = false }
+        )
     }
 
     if (showHorario) {
