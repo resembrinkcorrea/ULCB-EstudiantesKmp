@@ -110,7 +110,7 @@ fun MarcarAsistenciaScreen(
                 sistema = "APP ESTUDIANTE KMP",
                 ip = "",
                 flag_boton = if (estadoMarcacion.isNotEmpty()) 1 else 0,
-                nombreUNEG = "ILCB"
+                nombreUNEG = "ULCB"
             )
         }
     }

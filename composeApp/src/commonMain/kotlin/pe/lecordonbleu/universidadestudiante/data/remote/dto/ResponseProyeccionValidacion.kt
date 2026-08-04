@@ -27,7 +27,8 @@ data class ListProyeccionValidacion(
     val peracad_nombre: String = "",
     val msg_proyeccion: String = "",
     val promedio_ult_matricula: String = "",
-    val promedio_ponderado: String = ""
+    val promedio_ponderado: String = "",
+    val matric_url: String = ""
 )
 
 @Serializable

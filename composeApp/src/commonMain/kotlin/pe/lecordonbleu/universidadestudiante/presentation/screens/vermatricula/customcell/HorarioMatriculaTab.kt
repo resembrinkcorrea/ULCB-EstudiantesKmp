@@ -43,6 +43,7 @@ import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeCyan
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeDeepOrange
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeDeepPurple
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeGold
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbEsmeralda
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeGreen
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeIndigo
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeLightBlue
@@ -101,11 +102,14 @@ private fun nombreDia(abrev: String): String = when (abrev.uppercase()) {
 }
 
 @Composable
-fun HorarioMatriculaTab(items: List<ListVerMatric>) {
+fun HorarioMatriculaTab(
+    items: List<ListVerMatric>,
+    emptyText: String = "Selecciona una carrera"
+) {
     val colors = getColorsTheme()
     val horaInicio = 6
     val horaFin = 23
-    val alturaTotalDp = 1700.dp
+    val alturaTotalDp = 1200.dp
     val anchoHoras = 48.dp
     val anchoColumna = 120.dp
     val alturaHeader = 38.dp
@@ -134,24 +138,26 @@ fun HorarioMatriculaTab(items: List<ListVerMatric>) {
 
     if (diasOrdenados.isEmpty()) {
         Box(
-            modifier = Modifier.fillMaxSize().padding(32.dp),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = Icons.Default.CalendarToday,
-                    contentDescription = null,
-                    tint = colors.textColor.copy(alpha = 0.2f),
-                    modifier = Modifier.size(52.dp)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Selecciona una carrera",
-                    color = colors.textColor.copy(alpha = 0.4f),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.CalendarToday,
+                contentDescription = null,
+                tint = colors.textColor.copy(alpha = 0.2f),
+                modifier = Modifier.size(52.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = emptyText,
+                color = colors.textColor.copy(alpha = 0.4f),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+        }
         }
         return
     }

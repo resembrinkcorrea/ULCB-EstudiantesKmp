@@ -29,6 +29,9 @@ import pe.lecordonbleu.universidadestudiante.core.theme.IlcbCian
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbError
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisAzulado
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisCharcoal
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisSinVacante
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbCruceHorario
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbCruceHorarioDark
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisClaro
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisMedio
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGreenMid
@@ -137,7 +140,9 @@ fun getColorsTheme(): DarkModeColors {
         colorOrange800           = IlcbNaranjaOscuro,
         colorStripeRojo          = IlcbStripeRed,
         colorStripeAzul          = IlcbStripeBlue,
-        colorStripeVerde         = IlcbStripeGreen
+        colorStripeVerde         = IlcbStripeGreen,
+        colorSinVacante          = if (isDarkMode) IlcbGrisCharcoal.copy(alpha = 0.5f) else IlcbGrisSinVacante,
+        colorCruceHorario        = if (isDarkMode) IlcbCruceHorarioDark else IlcbCruceHorario
     )
 }
 
@@ -215,5 +220,7 @@ data class DarkModeColors(
     val colorOrange800: Color,
     val colorStripeRojo: Color,
     val colorStripeAzul: Color,
-    val colorStripeVerde: Color
+    val colorStripeVerde: Color,
+    val colorSinVacante: Color,
+    val colorCruceHorario: Color
 )

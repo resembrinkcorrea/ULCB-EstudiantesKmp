@@ -68,11 +68,12 @@ import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorrient
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.PagoFlywireScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.misofertas.MisOfertasScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.VerMatriculaScreen
-import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.VerMatriculaViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.TramiteDocumentarioScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.TramiteDocumentarioViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.RegistrarTramiteDocumentarioScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.RegistrarTramiteDocumentarioViewModel
+import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.MatriculaScreen
+import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.MatriculaViewModel
 
 
 fun provideHttpClient(): HttpClient = createHttpClient()
@@ -316,8 +317,11 @@ fun Navigation(
         }
 
         composable("/matricula") {
-            val vm: VerMatriculaViewModel = koinViewModel()
-            VerMatriculaScreen(viewModel = vm, navigator = navController)
+            val vm: MatriculaViewModel = koinViewModel()
+            MatriculaScreen(
+                viewModel = vm,
+                navigator = navController
+            )
         }
 
         composable("/misavisos") {

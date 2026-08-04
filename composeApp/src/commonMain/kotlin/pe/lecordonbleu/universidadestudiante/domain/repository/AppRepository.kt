@@ -119,12 +119,20 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseComprobante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCorreccionTramiteSave
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCrearTramites
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseDuplicadoTituloGuardar
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHoraPagoMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorarioPDF
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListaMatriculaDeudas
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerEstudianteMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerTurnoMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarTramite
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRequisitosTemp
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramiteDocFiltro
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramitePaises
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramitesDocumentos
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarDocumentos
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarEgresado
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarInicioMatricula
 import pe.lecordonbleu.universidadestudiante.domain.model.ComprobanteTramiteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.CorreccionTramiteSaveRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.CrearTramitesRequest
@@ -132,10 +140,18 @@ import pe.lecordonbleu.universidadestudiante.domain.model.DocumentosCreadosReque
 import pe.lecordonbleu.universidadestudiante.domain.model.DuplicadoTituloGuardarRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.FichaMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.GuardarArchivoTramiteRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.HoraPagoMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.HorarioPDFRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ListaMatriculaDeudasRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerEstudianteMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerTurnoMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarMatriculaBodyRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarTramiteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TramiteDocFiltroRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TramitePaisesRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ValidarDocumentosRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarEgresadoRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ValidarInicioMatriculaRequest
 
 interface AppRepository {
     suspend fun getMenuDataUser(userRequest: UserMenuRequest): List<ResponseDataMenu>
@@ -224,4 +240,16 @@ interface AppRepository {
     suspend fun duplicadoTituloGuardar(request: DuplicadoTituloGuardarRequest): ResponseDuplicadoTituloGuardar
 
     suspend fun generarFichaMatricula(request: FichaMatriculaRequest): ByteArray
+
+    suspend fun getObtenerEstudianteMatricula(request: ObtenerEstudianteMatriculaRequest): ResponseObtenerEstudianteMatricula
+    suspend fun getListaMatriculaDeudas(request: ListaMatriculaDeudasRequest): ResponseListaMatriculaDeudas
+    suspend fun getHoraPagoMatricula(request: HoraPagoMatriculaRequest): ResponseHoraPagoMatricula
+
+    suspend fun getObtenerTurnoMatricula(request: ObtenerTurnoMatriculaRequest): ResponseObtenerTurnoMatricula
+
+    suspend fun getValidarDocumentos(request: ValidarDocumentosRequest): ResponseValidarDocumentos
+    suspend fun getValidarInicioMatricula(request: ValidarInicioMatriculaRequest): ResponseValidarInicioMatricula
+    suspend fun registrarMatricula(request: RegistrarMatriculaBodyRequest): ResponseRegistrarMatricula
+    suspend fun getHorarioPDF(request: HorarioPDFRequest): ResponseHorarioPDF
+
 }

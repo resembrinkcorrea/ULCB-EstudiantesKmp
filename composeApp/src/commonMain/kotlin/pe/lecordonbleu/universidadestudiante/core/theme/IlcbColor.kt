@@ -63,7 +63,10 @@ val IlcbGrisOscuro   = Color(0xFF1E1E1E)
 val IlcbGrisAzulado  = Color(0xFFB0BEC5)
 val IlcbGrisNeutro   = Color(0xFF757575)
 val IlcbGrisPizarra  = Color(0xFF37474F)
-val IlcbGrisCharcoal = Color(0xFF424242)
+val IlcbGrisCharcoal     = Color(0xFF424242)
+val IlcbGrisSinVacante   = Color(0xFFC3C3C3) // sin vacantes (equivalente a grey_23 del nativo)
+val IlcbCruceHorario     = Color(0xFFEAD1D1) // fondo fila cruce horario light
+val IlcbCruceHorarioDark = Color(0xFF6B3232) // fondo fila cruce horario dark
 
 // --- Dashboard / Home vibrantes ---
 val IlcbVioletaMedio  = Color(0xFF8B5CF6)  // violeta medio (dashboard Notas)

@@ -40,10 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
-import pe.lecordonbleu.universidadestudiante.SettingsStorage
 import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Carrera
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListProyeccionValidacion
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListDetMatric
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListResumenHist
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListVerMatric
@@ -58,7 +57,7 @@ import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
 
 @Composable
 fun VerMatriculaScreen(
-    viewModel: VerMatriculaViewModel,
+    viewModel: MatriculaViewModel,
     navigator: NavController
 ) {
     // ─── 1. Variables y estados ───────────────────────────────────────────────
@@ -67,7 +66,7 @@ fun VerMatriculaScreen(
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
-    val idUneg = settings.getInt("id_uneg", 1)
+    val idUneg = Constantes.ID_UNEG
     val idSistema = settings.getInt("idSistema", 0)
 
     val uiStateProyeccion by viewModel.uiStateProyeccion.collectAsStateWithLifecycle()
@@ -80,6 +79,7 @@ fun VerMatriculaScreen(
     var idPeracad by remember { mutableStateOf(0) }
     var carreras by remember { mutableStateOf<List<Carrera>>(emptyList()) }
     var selectedCarrera by remember { mutableStateOf<Carrera?>(null) }
+    var proyeccionList by remember { mutableStateOf<List<ListProyeccionValidacion>>(emptyList()) }
     var verMatriculaList by remember { mutableStateOf<List<ListVerMatric>>(emptyList()) }
     var resumenHistoricoList by remember { mutableStateOf<List<ListResumenHist>>(emptyList()) }
     var detalleMap by remember { mutableStateOf<Map<Int, List<ListDetMatric>>>(emptyMap()) }
@@ -87,7 +87,6 @@ fun VerMatriculaScreen(
     var totalCreditos by remember { mutableStateOf("") }
     var maxCreditos by remember { mutableStateOf("") }
     var showLoading by remember { mutableStateOf(true) }
-    var carreraConsumida by remember { mutableStateOf(false) }
 
     // Tab 0 = Resumen Historico, Tab 1 = Ver Matricula, Tab 2 = Horario
     val tabs = listOf("Resumen Estudiante", "Ver Matricula", "Horario")
@@ -97,7 +96,6 @@ fun VerMatriculaScreen(
     LaunchedEffect(Unit) {
         viewModel.setProyeccion(idEstud)
     }
-
 
     // ─── 2. UI ────────────────────────────────────────────────────────────────
     Scaffold(
@@ -137,11 +135,14 @@ fun VerMatriculaScreen(
                             expandedIdOacad = null
                             totalCreditos = ""
                             maxCreditos = ""
-                            if (carrera.flag_carrera == "1") {
+                            val item = proyeccionList.firstOrNull { it.id_serv == carrera.id_serv.toIntOrNull() }
+                            if (item != null) {
+                                idEstudPe = item.id_estud_pe
+                                idPeracad = item.id_peracad
                                 viewModel.setVerMatricula(
                                     idPeracad,
-                                    carrera.id_serv.toIntOrNull() ?: 0,
-                                    carrera.id_pest_det.toIntOrNull() ?: 0,
+                                    item.id_serv,
+                                    item.id_pest_det,
                                     idEstud,
                                     idSistema,
                                     idUneg,
@@ -235,11 +236,7 @@ fun VerMatriculaScreen(
     when (val s = uiStateProyeccion) {
         is ResourceUiState.Loading -> { showLoading = true }
         is ResourceUiState.Success -> {
-            showLoading = false
-            s.data.ListProyeccionValidacion.firstOrNull()?.let { proy ->
-                idEstudPe = proy.id_estud_pe
-                idPeracad = proy.id_peracad
-            }
+            proyeccionList = s.data.ListProyeccionValidacion
             viewModel.resetProyeccionState()
             viewModel.setCarrera(idEstud)
         }
@@ -252,21 +249,26 @@ fun VerMatriculaScreen(
         is ResourceUiState.Success -> {
             showLoading = false
             carreras = s.data.carrera
-            if (!carreraConsumida) {
-                s.data.carrera.firstOrNull { it.flag_carrera == "1" }?.let { primera ->
-                    carreraConsumida = true
-                    selectedCarrera = primera
-                    viewModel.setVerMatricula(
-                        idPeracad,
-                        primera.id_serv.toIntOrNull() ?: 0,
-                        primera.id_pest_det.toIntOrNull() ?: 0,
-                        idEstud,
-                        idSistema,
-                        idUneg,
-                        idUsuario
-                    )
-                    viewModel.setResumenHistorico(idEstudPe, idPeracad)
-                }
+            val primeraCarrera = s.data.carrera.firstOrNull { it.flag_carrera == "1" }
+                ?: s.data.carrera.firstOrNull()
+            selectedCarrera = primeraCarrera
+            viewModel.resetCarreraState()
+            val item = primeraCarrera?.let { c ->
+                proyeccionList.firstOrNull { it.id_serv == c.id_serv.toIntOrNull() }
+            }
+            if (item != null) {
+                idEstudPe = item.id_estud_pe
+                idPeracad = item.id_peracad
+                viewModel.setVerMatricula(
+                    idPeracad,
+                    item.id_serv,
+                    item.id_pest_det,
+                    idEstud,
+                    idSistema,
+                    idUneg,
+                    idUsuario
+                )
+                viewModel.setResumenHistorico(idEstudPe, idPeracad)
             }
         }
         is ResourceUiState.Error -> { showLoading = false }
@@ -279,6 +281,7 @@ fun VerMatriculaScreen(
             showLoading = false
             if (s.data.flag_val != 0) {
                 verMatriculaList = s.data.list_vermatric
+                s.data.list_vermatric.forEach { println(it) }
                 totalCreditos = s.data.list_vermatric.sumOf { it.cant_tot_cred.toIntOrNull() ?: 0 }.toString()
                 maxCreditos = s.data.list_vermatric.firstOrNull()?.limite_maxcred ?: ""
             }

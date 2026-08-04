@@ -17,9 +17,9 @@ import pe.lecordonbleu.universidadestudiante.presentation.screens.archivoscompar
 import pe.lecordonbleu.universidadestudiante.presentation.screens.misenlaces.MisEnlacesViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.qr.QrViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.CuentaCorrienteViewModel
-import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.VerMatriculaViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.TramiteDocumentarioViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.RegistrarTramiteDocumentarioViewModel
+import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.MatriculaViewModel
 
 fun appModule() = module {
 
@@ -46,7 +46,7 @@ fun appModule() = module {
     factory { MisEnlacesViewModel(get()) }
     factory { EncuestaSatisfaccionViewModel(get()) }
     factory { CuentaCorrienteViewModel(get()) }
-    factory { VerMatriculaViewModel(get()) }
+    factory { MatriculaViewModel(get()) }
     factory { TramiteDocumentarioViewModel(get()) }
     factory { RegistrarTramiteDocumentarioViewModel(get()) }
 }

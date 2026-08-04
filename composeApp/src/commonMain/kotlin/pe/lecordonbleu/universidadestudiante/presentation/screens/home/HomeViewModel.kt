@@ -176,7 +176,7 @@ class HomeViewModel(private val repo: AppRepository) : ViewModel() {
             _listarEncuestaState.value = ResourceUiState.Loading
             try {
                 val response = repo.getListarEncuesta(
-                    ListarEncuestaRequest(id_uneg = 2, id_pest_det = idPestDet, id_peracad = idPeracad)
+                    ListarEncuestaRequest(id_uneg = 1, id_pest_det = idPestDet, id_peracad = idPeracad)
                 )
                 _listarEncuestaState.value = ResourceUiState.Success(response)
             } catch (e: Exception) {

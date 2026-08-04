@@ -53,13 +53,18 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHistorialAc
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHistorialAcademicoAlumnoDetalle
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHistorialNotas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHora
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHoraPagoMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorarioPDF
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseLinksInstitucional
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListaMatriculaDeudas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListaServicio
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarEncuesta
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseMarcarAsistencia
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseNavigationLog
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerEstudianteMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerTurnoMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePerfilEstudiante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePeriodo
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePeriodoCuentaCorriente
@@ -67,6 +72,7 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePlanEstudio
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePromedioNotas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseProyeccionValidacion
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseQr
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarTramite
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRequisitosTemp
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseResumenHistorico
@@ -82,7 +88,9 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTiposTareas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramiteDocFiltro
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramitePaises
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTramitesDocumentos
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarDocumentos
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarEgresado
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValidarInicioMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseValoresPlan
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseVerMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseVerificarComprobante
@@ -119,17 +127,23 @@ import pe.lecordonbleu.universidadestudiante.domain.model.HabilitarAulaDemoReque
 import pe.lecordonbleu.universidadestudiante.domain.model.HistorialAcademicoAlumnoDetalleRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.HistorialAcademicoAlumnoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.HistorialNotasRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.HoraPagoMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.HorarioPDFRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.HorarioRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.LinksItemRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ListaMatriculaDeudasRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ListarCuentaCorrienteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ListarEncuestaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.MarcarRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.NavigationLogRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerEstudianteMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerTurnoMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PeriodoCuentaCorrienteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PeriodoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PlanEstudioRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PromedioNotasRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.QrEntity
+import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarMatriculaBodyRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarTramiteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ResumenHistoricoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ServicioCuentaCorrienteRequest
@@ -146,7 +160,9 @@ import pe.lecordonbleu.universidadestudiante.domain.model.TramiteDocFiltroReques
 import pe.lecordonbleu.universidadestudiante.domain.model.TramitePaisesRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.UserMenuRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidaProyeccionRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ValidarDocumentosRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarEgresadoRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.ValidarInicioMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValoresPlanRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.VerMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.VerificarComprobanteRequest
@@ -1318,6 +1334,126 @@ class AppRepositoryImpl(private val httpClient: HttpClient) : AppRepository {
         } catch (e: Exception) {
             e.printStackTrace()
             ByteArray(0)
+        }
+    }
+
+    override suspend fun getObtenerEstudianteMatricula(request: ObtenerEstudianteMatriculaRequest): ResponseObtenerEstudianteMatricula {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}ObtenerEstudianteMatricula") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseObtenerEstudianteMatricula>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseObtenerEstudianteMatricula(flag_val = 0)
+        }
+    }
+
+    override suspend fun getListaMatriculaDeudas(request: ListaMatriculaDeudasRequest): ResponseListaMatriculaDeudas {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}ValidacionMatricula") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseListaMatriculaDeudas>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseListaMatriculaDeudas(flag_val = 0)
+        }
+    }
+
+    override suspend fun getHoraPagoMatricula(request: HoraPagoMatriculaRequest): ResponseHoraPagoMatricula {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}HoraPagoMatricula") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseHoraPagoMatricula>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseHoraPagoMatricula(flag_val = 0)
+        }
+    }
+
+    override suspend fun getObtenerTurnoMatricula(request: ObtenerTurnoMatriculaRequest): ResponseObtenerTurnoMatricula {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}obtenerTurnoMatricula") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseObtenerTurnoMatricula>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseObtenerTurnoMatricula(flag_val = 0)
+        }
+    }
+
+    override suspend fun getValidarDocumentos(request: ValidarDocumentosRequest): ResponseValidarDocumentos {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}ValidarDocumentosIngresante") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseValidarDocumentos>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseValidarDocumentos(flag_val = 0)
+        }
+    }
+
+    override suspend fun getValidarInicioMatricula(request: ValidarInicioMatriculaRequest): ResponseValidarInicioMatricula {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}ValidarMatriculaIniMat") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseValidarInicioMatricula>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseValidarInicioMatricula(flag_val = 0)
+        }
+    }
+
+    override suspend fun registrarMatricula(request: RegistrarMatriculaBodyRequest): ResponseRegistrarMatricula {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}RegistrarMatriculaEstudiante") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseRegistrarMatricula>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseRegistrarMatricula(flag_val = 0, mensaje = e.message ?: "Error al registrar matricula", "Error", "", 0)
+        }
+    }
+
+    override suspend fun getHorarioPDF(request: HorarioPDFRequest): ResponseHorarioPDF {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}generarHorarioPDF") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseHorarioPDF>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseHorarioPDF(flag_val = 0)
         }
     }
 
