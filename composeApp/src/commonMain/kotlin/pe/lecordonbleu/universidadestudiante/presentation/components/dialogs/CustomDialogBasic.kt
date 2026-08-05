@@ -18,13 +18,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.window.DialogProperties
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logoilcb
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.getPlatformContext
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbBlueDeep
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbError
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGreenMid
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbWarning
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo
 
 @Composable
 fun CustomDialogBasic(
@@ -80,7 +80,7 @@ fun CustomDialogBasic(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Image(
-                        painter = painterResource(Res.drawable.logoilcb),
+                        painter = painterResource(Res.drawable.ulcb_logo),
                         contentDescription = "Logo LCB",
                         modifier = Modifier
                             .height(60.dp)

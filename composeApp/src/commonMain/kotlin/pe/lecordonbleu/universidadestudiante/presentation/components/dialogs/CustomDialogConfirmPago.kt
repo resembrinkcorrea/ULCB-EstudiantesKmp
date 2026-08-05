@@ -42,13 +42,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logoilcb
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbBlueDeep
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbBlueMid
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbNaranjaDorado
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbOnBrand
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo
 
 @Composable
 fun CustomDialogConfirmPago(
@@ -125,7 +125,7 @@ fun CustomDialogConfirmPago(
 
                 // ── Logo ──────────────────────────────────────────────────────────
                 Image(
-                    painter = painterResource(Res.drawable.logoilcb),
+                    painter = painterResource(Res.drawable.ulcb_logo),
                     contentDescription = "Logo LCB",
                     modifier = Modifier
                         .height(52.dp)

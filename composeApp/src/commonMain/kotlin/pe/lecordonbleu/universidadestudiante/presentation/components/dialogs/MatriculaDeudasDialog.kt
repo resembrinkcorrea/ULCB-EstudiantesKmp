@@ -52,7 +52,7 @@ import pe.lecordonbleu.universidadestudiante.core.theme.IlcbWarning
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListaMatriculaValidacion
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo
 
 @Composable
 fun MatriculaDeudasDialog(
@@ -132,7 +132,7 @@ fun MatriculaDeudasDialog(
 
                 // ── Logo ─────────────────────────────────────────────────────────
                 Image(
-                    painter = painterResource(Res.drawable.logo_instbleu),
+                    painter = painterResource(Res.drawable.ulcb_logo),
                     contentDescription = "Logo LCB",
                     modifier = Modifier
                         .height(48.dp)

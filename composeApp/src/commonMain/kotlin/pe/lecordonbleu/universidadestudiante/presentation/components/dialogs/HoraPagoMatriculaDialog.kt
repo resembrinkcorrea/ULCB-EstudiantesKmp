@@ -46,7 +46,7 @@ import pe.lecordonbleu.universidadestudiante.core.theme.IlcbOnBrand
 import pe.lecordonbleu.universidadestudiante.core.theme.IlcbWarning
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import ulcbintranetkmp.composeapp.generated.resources.Res
-import ulcbintranetkmp.composeapp.generated.resources.logo_instbleu
+import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo
 
 @Composable
 fun HoraPagoMatriculaDialog(
@@ -104,7 +104,7 @@ fun HoraPagoMatriculaDialog(
 
                 // Logo
                 Image(
-                    painter = painterResource(Res.drawable.logo_instbleu),
+                    painter = painterResource(Res.drawable.ulcb_logo),
                     contentDescription = "Logo LCB",
                     modifier = Modifier
                         .height(48.dp)
