@@ -6,7 +6,7 @@ object MpPaymentSession {
     var montoDisplay: String = ""
     var email: String = ""
     var dni: String = ""
-    var idUneg: Int = 2
+    var idUneg: Int = 1
     var externalReference: String = ""
     var tipo: String = "APPCC"
 
@@ -16,7 +16,7 @@ object MpPaymentSession {
         montoDisplay = ""
         email = ""
         dni = ""
-        idUneg = 2
+        idUneg = 1
         externalReference = ""
         tipo = "APPCC"
     }

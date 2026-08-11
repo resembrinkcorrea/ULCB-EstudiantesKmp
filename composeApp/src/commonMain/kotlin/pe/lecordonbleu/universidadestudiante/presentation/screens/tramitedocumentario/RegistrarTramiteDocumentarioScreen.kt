@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -52,11 +51,13 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import pe.lecordonbleu.universidadestudiante.currentTimeMillis
 import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CarreraRemote
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListPaises
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListPerfilEstudiante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Modalidad
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.PasarelaActiva
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.TipoEntrega
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Tramite
 import pe.lecordonbleu.universidadestudiante.domain.model.DuplicadoTituloGuardarRequest
@@ -75,11 +76,14 @@ import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import pe.lecordonbleu.universidadestudiante.getSettingsStorage
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDateTime
 import pe.lecordonbleu.universidadestudiante.presentation.components.AppDropdownMenu
+import pe.lecordonbleu.universidadestudiante.presentation.components.SearchableDropdownMenu
 import pe.lecordonbleu.universidadestudiante.presentation.components.LockedRow
 import pe.lecordonbleu.universidadestudiante.presentation.components.ProgressBarLoading
 import pe.lecordonbleu.universidadestudiante.presentation.components.StandardTopBar
 import pe.lecordonbleu.universidadestudiante.presentation.components.StatusLabel
 import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogBasic
+import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogSelectorPasarela
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.MpPaymentSession
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.AccionIconButton
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.DatosRecojo
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.DialogEntregaPresencial
@@ -89,6 +93,7 @@ import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.RequisitoTramiteD
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.stripHtml
 import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
+import pe.lecordonbleu.universidadestudiante.randomAlphanumeric4
 import pe.lecordonbleu.universidadestudiante.util.Base64Encoder
 import kotlin.math.round
 
@@ -101,9 +106,8 @@ fun RegistrarTramiteDocumentarioScreen(
     val colors = getColorsTheme()
     val focusManager = LocalFocusManager.current
     val settings = getSettingsStorage()
-    //val idSistema = settings.getInt("idSistema", 0)
-    val idSistema = 3  // universidad 3 , instituto 13
-    val idUneg = settings.getInt("id_uneg", 1)
+    val idSistema = settings.getInt("idSistema", 0)
+    val idUneg = Constantes.ID_UNEG
     val idEstud = settings.getInt("idEstud", 0)
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
     val idUsuario = settings.getInt("idUsuario", settings.getInt("id_usuario", 0))
@@ -111,8 +115,6 @@ fun RegistrarTramiteDocumentarioScreen(
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    val modalidades = listOf("Seleccionar")
-    val onCorregirClick: () -> Unit = {}
     val onDismiss: () -> Unit = { navigator.popBackStack() }
 
     val uiStateTramiteDocFiltro by viewModel.uiStateTramiteDocFiltro.collectAsStateWithLifecycle()
@@ -133,6 +135,7 @@ fun RegistrarTramiteDocumentarioScreen(
     val uiStateGuardarArchivoTramite by viewModel.uiStateGuardarArchivo.collectAsStateWithLifecycle()
     val uiStateDuplicadoTitulo by viewModel.uiStateDuplicadoTitulo.collectAsStateWithLifecycle()
     val uiStateCarrera by viewModel.uiStateCarrera.collectAsStateWithLifecycle()
+    val uiStatePasarelas by viewModel.uiStatePasarelas.collectAsStateWithLifecycle()
 
     val opcionSeleccione =
         remember { Tramite(tipo = "", contador = 0, id = "0", nombre = "SELECCIONE") }
@@ -190,6 +193,12 @@ fun RegistrarTramiteDocumentarioScreen(
     var alertFlag by remember { mutableStateOf(0) }
     var showSuccessDialog by remember { mutableStateOf(false) }
 
+    var showSelectorPasarela by remember { mutableStateOf(false) }
+    var pendingCallbackId by remember { mutableStateOf("") }
+    var pendingMonto by remember { mutableStateOf("") }
+    var pendingTemporalBody by remember { mutableStateOf("") }
+    var pasarelasActivas by remember { mutableStateOf<List<PasarelaActiva>?>(null) }
+
     LaunchedEffect(Unit) {
         viewModel.setUserCarreraRequest(idEstud)
         viewModel.setTramitePaisesRequest(idUneg)
@@ -218,7 +227,9 @@ fun RegistrarTramiteDocumentarioScreen(
                 if (modalPresencial == 0 && datosRecojo.recoger == -1) {
                     datosRecojo = DatosRecojo(recoger = 0)
                 }
+                viewModel.resetPasarelasState()
                 showProgress = true
+                viewModel.setPasarelasActivas(2, idUneg)
                 viewModel.setValidarEgresadoRequest(
                     id_sistema = idSistema,
                     id_estud_pe = idEstudPe,
@@ -296,34 +307,6 @@ fun RegistrarTramiteDocumentarioScreen(
                 fontSize = 16.sp,
                 color = colors.textColor
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "Nro",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = colors.textColor
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (selectedTipoEntrega?.modal_presencial == "1") {
-                        AccionIconButton(
-                            icono = Icons.Default.Person,
-                            colorFondo = colors.secondary,
-                            descripcion = "Recojo",
-                            onClick = { showDialogRecojo = true }
-                        )
-                    }
-                    AccionIconButton(
-                        icono = Icons.Default.ChatBubble,
-                        colorFondo = colors.colorRojo,
-                        descripcion = "Corregir",
-                        onClick = onCorregirClick
-                    )
-                }
-            }
 
             AppDropdownMenu(
                 items = carreras.filterNotNull(),
@@ -378,20 +361,12 @@ fun RegistrarTramiteDocumentarioScreen(
                 }
             )
 
-            AppDropdownMenu(
-                items = paises.filterNotNull(),
-                selectedItem = paisSeleccionado,
-                label = "País",
-                itemLabel = { it.pais_nombre },
-                onItemSelected = { paisSeleccionado = it },
-                enabled = paises.isNotEmpty()
-            )
-
-            AppDropdownMenu(
+            SearchableDropdownMenu(
                 items = tramitesCombo,
                 selectedItem = selectedTramite,
                 label = "Tramite",
                 itemLabel = { it.nombre },
+                searchPlaceholder = "Buscar trámite...",
                 onItemSelected = { tramiteSeleccionado ->
                     selectedTramite = tramiteSeleccionado
                     tipoEntregaList = emptyList()
@@ -444,6 +419,15 @@ fun RegistrarTramiteDocumentarioScreen(
                 )
             )
 
+            AppDropdownMenu(
+                items = paises.filterNotNull(),
+                selectedItem = paisSeleccionado,
+                label = "País",
+                itemLabel = { it.pais_nombre },
+                onItemSelected = { paisSeleccionado = it },
+                enabled = paises.isNotEmpty()
+            )
+
             }
             }
 
@@ -458,12 +442,26 @@ fun RegistrarTramiteDocumentarioScreen(
                     modifier = Modifier.padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        "Entrega y Modalidad",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = colors.textColor
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "Entrega y Modalidad",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = colors.textColor
+                        )
+                        if (selectedTipoEntrega?.modal_presencial == "1") {
+                            AccionIconButton(
+                                icono = Icons.Default.Person,
+                                colorFondo = colors.secondary,
+                                descripcion = "Recojo",
+                                onClick = { showDialogRecojo = true }
+                            )
+                        }
+                    }
                     AppDropdownMenu(
                         items = tipoEntregaList,
                         selectedItem = selectedTipoEntrega,
@@ -681,6 +679,11 @@ fun RegistrarTramiteDocumentarioScreen(
         }
 
         is ResourceUiState.Error -> viewModel.resetPerfilEstudianteState()
+        else -> Unit
+    }
+
+    when (val s = uiStatePasarelas) {
+        is ResourceUiState.Success -> { pasarelasActivas = s.data.pasarelas }
         else -> Unit
     }
 
@@ -986,7 +989,18 @@ fun RegistrarTramiteDocumentarioScreen(
                                     senderCountry = paisSeleccionado?.pais_prefijo.orEmpty(),
                                     perfilEstudiante = perfil, idUsuario = idUsuario, idUneg = idUneg
                                 )
-                                viewModel.setTemporalCuentaCorriente(request.body)
+                                pendingCallbackId = callbackId
+                                pendingMonto = monto
+                                pendingTemporalBody = request.body
+                                if (pasarelasActivas?.isNotEmpty() != false) {
+                                    showSelectorPasarela = true
+                                } else {
+                                    alertTitulo = "TRAMITE DOCUMENTARIO"
+                                    alertMensaje = "No hay metodos de pago disponibles en este momento."
+                                    alertFlag = 0; alertConfirmado = false
+                                    showAlertDialog = true
+                                }
+                                showProgress = false
                             } else {
                                 alertTitulo = "TRAMITE DOCUMENTARIO"
                                 alertMensaje = "No se pudo cargar el perfil del estudiante."
@@ -1117,7 +1131,10 @@ fun RegistrarTramiteDocumentarioScreen(
                             senderCountry = paisSeleccionado?.pais_prefijo.orEmpty(),
                             perfilEstudiante = perfil, idUsuario = idUsuario, idUneg = idUneg
                         )
-                        viewModel.setTemporalCuentaCorriente(request.body)
+                        pendingCallbackId = callbackId
+                        pendingMonto = monto
+                        pendingTemporalBody = request.body
+                        showSelectorPasarela = true
                     } else {
                         alertTitulo = "TRAMITE DOCUMENTARIO"
                         alertMensaje = "No se pudo cargar el perfil del estudiante."
@@ -1187,7 +1204,10 @@ fun RegistrarTramiteDocumentarioScreen(
                             senderCountry = paisSeleccionado?.pais_prefijo.orEmpty(),
                             perfilEstudiante = perfil, idUsuario = idUsuario, idUneg = idUneg
                         )
-                        viewModel.setTemporalCuentaCorriente(request.body)
+                        pendingCallbackId = callbackId
+                        pendingMonto = monto
+                        pendingTemporalBody = request.body
+                        showSelectorPasarela = true
                     } else {
                         alertTitulo = "TRAMITE DOCUMENTARIO"
                         alertMensaje = "No se pudo cargar el perfil del estudiante."
@@ -1257,7 +1277,10 @@ fun RegistrarTramiteDocumentarioScreen(
                             senderCountry = paisSeleccionado?.pais_prefijo.orEmpty(),
                             perfilEstudiante = perfil, idUsuario = idUsuario, idUneg = idUneg
                         )
-                        viewModel.setTemporalCuentaCorriente(request.body)
+                        pendingCallbackId = callbackId
+                        pendingMonto = monto
+                        pendingTemporalBody = request.body
+                        showSelectorPasarela = true
                     } else {
                         alertTitulo = "TRAMITE DOCUMENTARIO"
                         alertMensaje = "No se pudo cargar el perfil del estudiante."
@@ -1318,6 +1341,52 @@ fun RegistrarTramiteDocumentarioScreen(
         }
 
         else -> Unit
+    }
+
+    if (showSelectorPasarela) {
+        CustomDialogSelectorPasarela(
+            visible = true,
+            monto = pendingMonto,
+            pasarelas = pasarelasActivas.orEmpty(),
+            onFlywire = {
+                showSelectorPasarela = false
+                showProgress = true
+                if (pendingTemporalBody.isNotEmpty()) viewModel.setTemporalCuentaCorriente(pendingTemporalBody)
+            },
+            onYape = {
+                showSelectorPasarela = false
+                val perfil = perfilEstudiante
+                if (perfil != null) {
+                    MpPaymentSession.callbackId = Base64Encoder.encodeToBase64(pendingCallbackId).trim()
+                    MpPaymentSession.monto = parseMontoTramite(pendingMonto)
+                    MpPaymentSession.montoDisplay = pendingMonto
+                    MpPaymentSession.email = perfil.correo_personal
+                    MpPaymentSession.dni = perfil.numero_documento.toString()
+                    MpPaymentSession.idUneg = idUneg
+                    MpPaymentSession.externalReference = "APPTD-YAPE-${currentTimeMillis()}-${randomAlphanumeric4()}"
+                    MpPaymentSession.tipo = "APPTD"
+                    onDismiss()
+                    navigator.navigate("/pagoYape")
+                }
+            },
+            onMercadoPago = {
+                showSelectorPasarela = false
+                val perfil = perfilEstudiante
+                if (perfil != null) {
+                    MpPaymentSession.callbackId = Base64Encoder.encodeToBase64(pendingCallbackId).trim()
+                    MpPaymentSession.monto = parseMontoTramite(pendingMonto)
+                    MpPaymentSession.montoDisplay = pendingMonto
+                    MpPaymentSession.email = perfil.correo_personal
+                    MpPaymentSession.dni = perfil.numero_documento.toString()
+                    MpPaymentSession.idUneg = idUneg
+                    MpPaymentSession.externalReference = "APPTD-CARD-${currentTimeMillis()}-${randomAlphanumeric4()}"
+                    MpPaymentSession.tipo = "APPTD"
+                    onDismiss()
+                    navigator.navigate("/pagoMercadoPago")
+                }
+            },
+            onDismiss = { showSelectorPasarela = false }
+        )
     }
 
     if (showDialogRecojo) {

@@ -75,6 +75,7 @@ class TramiteDocumentarioViewModel(private val repo: AppRepository) : ViewModel(
         idUsuario: Int,
         idTipoUsuario: Int,
         idTipoServa: Int,
+        idSistema: Int,
         estado: EstadoTramite?,
         tipoTramite: TipoTramite?,
         tramite: Tramite?,
@@ -83,7 +84,7 @@ class TramiteDocumentarioViewModel(private val repo: AppRepository) : ViewModel(
     ) {
         documentosCreadosRequest = DocumentosCreadosRequest(
             idTramite = tramite?.id?.toIntOrNull() ?: 0,
-            id_sistema = 13,
+            id_sistema = idSistema,
             idEstado = estado?.id_paragene?.toIntOrNull() ?: 0,
             fechaInicio = fechaInicio,
             idUsuario = idUsuario,
