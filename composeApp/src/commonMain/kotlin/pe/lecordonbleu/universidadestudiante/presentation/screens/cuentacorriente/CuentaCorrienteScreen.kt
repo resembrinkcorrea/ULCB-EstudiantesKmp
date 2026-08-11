@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.serialization.json.Json
+import pe.lecordonbleu.universidadestudiante.currentTimeMillis
 import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.DataPerfilList
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListCampania
@@ -59,6 +60,7 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListPeriodoCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListServicioCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListaDeudaCuentaCorriente
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.PasarelaActiva
 import pe.lecordonbleu.universidadestudiante.domain.model.PagoDetalleTemporal
 import pe.lecordonbleu.universidadestudiante.domain.model.PagoNameValuePairs
 import pe.lecordonbleu.universidadestudiante.domain.model.PagosNameValuePairs
@@ -77,7 +79,10 @@ import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.Cus
 import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogResultCampania
 import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogConfirmPago
 import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogDeudas
+import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogSelectorPasarela
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.MpPaymentSession
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.customcell.CuotaCard
+import pe.lecordonbleu.universidadestudiante.randomAlphanumeric4
 import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
 import pe.lecordonbleu.universidadestudiante.util.Base64Encoder
 import pe.lecordonbleu.universidadestudiante.util.CountryCodes
@@ -99,6 +104,7 @@ fun CuentaCorrienteScreen(
     val idUsuario = settings.getInt("idUsuario", 0)
     val idUneg = Constantes.ID_UNEG
 
+    val uiStatePasarelas by viewModel.uiStatePasarelas.collectAsStateWithLifecycle()
     val uiStateServicio by viewModel.uiStateServicio.collectAsStateWithLifecycle()
     val uiStatePeriodo by viewModel.uiStatePeriodo.collectAsStateWithLifecycle()
     val uiStateListar by viewModel.uiStateListar.collectAsStateWithLifecycle()
@@ -122,6 +128,8 @@ fun CuentaCorrienteScreen(
     var showDeudasDialog by remember { mutableStateOf(false) }
     var listaDeudasDialog by remember { mutableStateOf<List<ListaDeudaCuentaCorriente>>(emptyList()) }
     var showConfirmDialog by remember { mutableStateOf(false) }
+    var showSelectorDialog by remember { mutableStateOf(false) }
+    var pasarelasActivas by remember { mutableStateOf<List<PasarelaActiva>>(emptyList()) }
     var temporalRequest by remember { mutableStateOf<TemporalCuentaCorrienteRequest?>(null) }
     var showErrorDialog by remember { mutableStateOf(false) }
     var mensajeErrorDialog by remember { mutableStateOf("") }
@@ -238,6 +246,14 @@ fun CuentaCorrienteScreen(
                                         val callbaid =
                                             Base64Encoder.encodeToBase64(concatenado).trim()
 
+                                        val emailPerfil = if (perfil.correoelec_ins.isNotEmpty()) perfil.correoelec_ins else perfil.correo_personal
+                                        MpPaymentSession.callbackId = callbaid
+                                        MpPaymentSession.monto = amountTotal
+                                        MpPaymentSession.montoDisplay = monto
+                                        MpPaymentSession.email = emailPerfil
+                                        MpPaymentSession.dni = perfil.numero_documento
+                                        MpPaymentSession.idUneg = idUneg
+
                                         temporalRequest = sendToDB(
                                             perfil = perfil,
                                             callbaid = callbaid,
@@ -245,7 +261,7 @@ fun CuentaCorrienteScreen(
                                             idUneg = idUneg.toString(),
                                             senderCountry = senderCountry
                                         )
-                                        showConfirmDialog = true
+                                        viewModel.setPasarelasActivas(2, idUneg)
                                     }
                                 }
                             }
@@ -768,6 +784,25 @@ fun CuentaCorrienteScreen(
         else -> {}
     }
 
+    when (val s = uiStatePasarelas) {
+        is ResourceUiState.Success -> {
+            pasarelasActivas = s.data.pasarelas
+            if (s.data.pasarelas.isNotEmpty()) {
+                showSelectorDialog = true
+            } else {
+                mensajeErrorDialog = "No hay metodos de pago disponibles en este momento."
+                showErrorDialog = true
+            }
+            viewModel.resetPasarelasState()
+        }
+        is ResourceUiState.Error -> {
+            mensajeErrorDialog = "Ha ocurrido un error, intente más tarde"
+            showErrorDialog = true
+            viewModel.resetPasarelasState()
+        }
+        else -> {}
+    }
+
     when (val s = uiStateSolicitarCampania) {
         is ResourceUiState.Loading -> { showLoading = true }
         is ResourceUiState.Success -> {
@@ -840,6 +875,36 @@ fun CuentaCorrienteScreen(
             onDismiss = {
                 showDeudasDialog = false
                 viewModel.resetDeudasState()
+            }
+        )
+    }
+
+    if (showSelectorDialog) {
+        CustomDialogSelectorPasarela(
+            visible = true,
+            monto = monto,
+            pasarelas = pasarelasActivas,
+            onFlywire = {
+                showSelectorDialog = false
+                showConfirmDialog = true
+            },
+            onYape = {
+                showSelectorDialog = false
+                val tsYape = currentTimeMillis()
+                MpPaymentSession.externalReference = "APPCC-YAPE-$tsYape-${randomAlphanumeric4()}"
+                MpPaymentSession.tipo = "APPCC"
+                navigator.navigate("/pagoYape")
+            },
+            onMercadoPago = {
+                showSelectorDialog = false
+                val tsTarj = currentTimeMillis()
+                MpPaymentSession.externalReference = "APPCC-CARD-$tsTarj-${randomAlphanumeric4()}"
+                MpPaymentSession.tipo = "APPCC"
+                navigator.navigate("/pagoMercadoPago")
+            },
+            onDismiss = {
+                showSelectorDialog = false
+                pasarelasActivas = emptyList()
             }
         )
     }

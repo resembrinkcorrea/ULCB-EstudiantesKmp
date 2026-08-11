@@ -66,6 +66,10 @@ import pe.lecordonbleu.universidadestudiante.presentation.screens.marcarasistenc
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.CuentaCorrienteScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.CuentaCorrienteViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorriente.PagoFlywireScreen
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.MercadoPagoViewModel
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.PagoMercadoPagoScreen
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.PagoYapeScreen
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.YapeViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.misofertas.MisOfertasScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.VerMatriculaScreen
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.TramiteDocumentarioScreen
@@ -258,6 +262,16 @@ fun Navigation(
             val codTransaccion = backStackEntry.savedStateHandle.get<String>("codTransaccion") ?: ""
             val rutaRetorno = backStackEntry.savedStateHandle.get<String>("rutaRetorno") ?: "cuentaCorriente"
             PagoFlywireScreen(codTransaccion = codTransaccion, rutaRetorno = rutaRetorno, navigator = navController)
+        }
+
+        composable("/pagoYape") {
+            val vm: YapeViewModel = koinViewModel()
+            PagoYapeScreen(viewModel = vm, navigator = navController)
+        }
+
+        composable("/pagoMercadoPago") {
+            val vm: MercadoPagoViewModel = koinViewModel()
+            PagoMercadoPagoScreen(viewModel = vm, navigator = navController)
         }
 
         composable("/horarioEstudiante") {

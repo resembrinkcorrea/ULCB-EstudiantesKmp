@@ -8,8 +8,13 @@ import pe.lecordonbleu.universidadestudiante.core.di.appModule
 
 class MainApplication : Application() {
 
+    companion object {
+        lateinit var instance: MainApplication
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         initializeKoin()
     }
 

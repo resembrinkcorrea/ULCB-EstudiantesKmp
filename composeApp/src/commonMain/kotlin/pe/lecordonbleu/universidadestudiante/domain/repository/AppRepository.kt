@@ -1,5 +1,6 @@
 package pe.lecordonbleu.universidadestudiante.domain.repository
 
+import pe.lecordonbleu.universidadestudiante.domain.model.RegisterPaymentRequest
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCarrera
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCarreraPlanEstudio
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCarrerasConvalidacion
@@ -122,8 +123,11 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseDuplicadoTi
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHoraPagoMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorarioPDF
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListaMatriculaDeudas
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseMercadoPago
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerEstudianteMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerTurnoMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePasarelasActivas
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePublicKeyMP
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarTramite
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRequisitosTemp
@@ -145,13 +149,18 @@ import pe.lecordonbleu.universidadestudiante.domain.model.HorarioPDFRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ListaMatriculaDeudasRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerEstudianteMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerTurnoMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.PagoEfectivoRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.PasarelasActivasRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarMatriculaBodyRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.RegistrarTramiteRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.TarjetaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TramiteDocFiltroRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TramitePaisesRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarDocumentosRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarEgresadoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarInicioMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.YapeRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenResponse
 
 interface AppRepository {
     suspend fun getMenuDataUser(userRequest: UserMenuRequest): List<ResponseDataMenu>
@@ -251,5 +260,13 @@ interface AppRepository {
     suspend fun getValidarInicioMatricula(request: ValidarInicioMatriculaRequest): ResponseValidarInicioMatricula
     suspend fun registrarMatricula(request: RegistrarMatriculaBodyRequest): ResponseRegistrarMatricula
     suspend fun getHorarioPDF(request: HorarioPDFRequest): ResponseHorarioPDF
+    suspend fun getMpPublicKey(idUneg: Int): ResponsePublicKeyMP
+    suspend fun procesarPagoTarjeta(request: TarjetaRequest): ResponseMercadoPago
+    suspend fun procesarPagoEfectivo(request: PagoEfectivoRequest): ResponseMercadoPago
+    suspend fun getPasarelasActivas(request: PasarelasActivasRequest): ResponsePasarelasActivas
 
+    suspend fun tokenizarYapeMP(phoneNumber: String, otp: String, publicKey: String): YapeTokenResponse
+
+    suspend fun procesarPagoYape(request: YapeRequest): ResponseMercadoPago
+    suspend fun registrarPagoMP(request: RegisterPaymentRequest)
 }

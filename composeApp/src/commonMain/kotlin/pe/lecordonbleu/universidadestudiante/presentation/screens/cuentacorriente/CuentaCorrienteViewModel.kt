@@ -5,16 +5,20 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pe.lecordonbleu.universidadestudiante.SettingsStorage
+import pe.lecordonbleu.universidadestudiante.getSettingsStorage
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListDetalleCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseDetalleCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseDeudasCuentasCorrientes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarCuentaCorriente
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePasarelasActivas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePeriodoCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseServicioCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTemporalCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTextosHtml
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseVerificarComprobante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseComprobantePecano
+import pe.lecordonbleu.universidadestudiante.domain.model.PasarelasActivasRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ComprobantePecanoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.DetalleCuentaCorrienteRequest
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarCampania
@@ -44,6 +48,7 @@ class CuentaCorrienteViewModel(private val repo: AppRepository) : ViewModel() {
     private val _uiStateListarCampania = MutableStateFlow<ResourceUiState<ResponseListarCampania>>(ResourceUiState.Empty)
     private val _uiStateSolicitarCampania = MutableStateFlow<ResourceUiState<ResponseSolicitarCampania>>(ResourceUiState.Empty)
     private val _uiStateTextosHtml = MutableStateFlow<ResourceUiState<ResponseTextosHtml>>(ResourceUiState.Empty)
+    private val _uiStatePasarelas = MutableStateFlow<ResourceUiState<ResponsePasarelasActivas>>(ResourceUiState.Empty)
     private val _detalleMap = MutableStateFlow<Map<Pair<Int, Int>, List<ListDetalleCuentaCorriente>>>(emptyMap())
 
     val uiStateServicio = _uiStateServicio.asStateFlow()
@@ -57,6 +62,7 @@ class CuentaCorrienteViewModel(private val repo: AppRepository) : ViewModel() {
     val uiStateListarCampania = _uiStateListarCampania.asStateFlow()
     val uiStateSolicitarCampania = _uiStateSolicitarCampania.asStateFlow()
     val uiStateTextosHtml = _uiStateTextosHtml.asStateFlow()
+    val uiStatePasarelas = _uiStatePasarelas.asStateFlow()
     val detalleMap = _detalleMap.asStateFlow()
 
     private lateinit var servicioCuentaCorrienteRequest: ServicioCuentaCorrienteRequest
@@ -260,6 +266,22 @@ class CuentaCorrienteViewModel(private val repo: AppRepository) : ViewModel() {
     fun resetListarState() { _uiStateListar.value = ResourceUiState.Empty }
     fun resetListarCampaniaState() { _uiStateListarCampania.value = ResourceUiState.Empty }
     fun resetSolicitarCampaniaState() { _uiStateSolicitarCampania.value = ResourceUiState.Empty }
+    fun resetPasarelasState() { _uiStatePasarelas.value = ResourceUiState.Empty }
     fun resetServicioState() { _uiStateServicio.value = ResourceUiState.Empty }
     fun resetPeriodoState() { _uiStatePeriodo.value = ResourceUiState.Empty }
+
+    fun setPasarelasActivas(condicion: Int, idUneg: Int) {
+        viewModelScope.launch {
+            _uiStatePasarelas.value = ResourceUiState.Loading
+            try {
+                val settingsStorage: SettingsStorage = getSettingsStorage()
+                val idSistema = settingsStorage.getInt("idSistema", 0)
+                val idUsuario = settingsStorage.getInt("idUsuario", 0)
+                val result = repo.getPasarelasActivas(PasarelasActivasRequest(condicion, idUneg, idSistema, idUsuario))
+                _uiStatePasarelas.value = ResourceUiState.Success(result)
+            } catch (e: Exception) {
+                _uiStatePasarelas.value = ResourceUiState.Error(e.message ?: "Error al obtener pasarelas")
+            }
+        }
+    }
 }

@@ -3,11 +3,13 @@ package pe.lecordonbleu.universidadestudiante.data.repository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.serialization.json.Json
@@ -62,15 +64,18 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListaServic
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseListarEncuesta
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseMarcarAsistencia
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseMercadoPago
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseNavigationLog
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerEstudianteMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseObtenerTurnoMatricula
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePasarelasActivas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePerfilEstudiante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePeriodo
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePeriodoCuentaCorriente
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePlanEstudio
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePromedioNotas
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseProyeccionValidacion
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePublicKeyMP
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseQr
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarMatricula
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarTramite
@@ -138,6 +143,9 @@ import pe.lecordonbleu.universidadestudiante.domain.model.MarcarRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.NavigationLogRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerEstudianteMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ObtenerTurnoMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.PagoEfectivoRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.PasarelasActivasRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.RegisterPaymentRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PeriodoCuentaCorrienteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PeriodoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.PlanEstudioRequest
@@ -152,6 +160,7 @@ import pe.lecordonbleu.universidadestudiante.domain.model.ServicioTipoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TablaPlanRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TagsArchivosRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TareasAcadRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.TarjetaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TemporalCuentaCorrienteRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TextosHtmlRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.TipoTrasladoRequest
@@ -166,7 +175,12 @@ import pe.lecordonbleu.universidadestudiante.domain.model.ValidarInicioMatricula
 import pe.lecordonbleu.universidadestudiante.domain.model.ValoresPlanRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.VerMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.VerificarComprobanteRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.YapeRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenRequest
+import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenResponse
 import pe.lecordonbleu.universidadestudiante.domain.repository.AppRepository
+import pe.lecordonbleu.universidadestudiante.fetchMpDeviceSession
+import kotlin.random.Random
 
 class AppRepositoryImpl(private val httpClient: HttpClient) : AppRepository {
 
@@ -1457,4 +1471,118 @@ class AppRepositoryImpl(private val httpClient: HttpClient) : AppRepository {
         }
     }
 
+    override suspend fun getMpPublicKey(idUneg: Int): ResponsePublicKeyMP {
+        return try {
+            val response = httpClient.get("${Constantes.BASE_ROOT_MP}/api/checkout?id_uneg=$idUneg")
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString(response.body<String>())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponsePublicKeyMP()
+        }
+    }
+
+    override suspend fun procesarPagoTarjeta(request: TarjetaRequest): ResponseMercadoPago {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_MP}/api/checkout") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val bodyStr = response.body<String>()
+            println("[MP-RAW] ${response.status.value} | $bodyStr")
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString(bodyStr)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseMercadoPago(status = "error", status_detail_message = e.message ?: "Error al procesar pago con tarjeta")
+        }
+    }
+
+    override suspend fun procesarPagoEfectivo(request: PagoEfectivoRequest): ResponseMercadoPago {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_MP}/api/checkout") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val bodyStr = response.body<String>()
+            println("[MP-EFEC-RAW] ${response.status.value} | $bodyStr")
+            val json = Json { ignoreUnknownKeys = true }
+            val result = json.decodeFromString<ResponseMercadoPago>(bodyStr)
+            if (!response.status.isSuccess() && result.status.isEmpty()) {
+                return ResponseMercadoPago(
+                    status = "error",
+                    status_detail_message = "No se pudo generar el ticket de pago. Intenta nuevamente."
+                )
+            }
+            result
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseMercadoPago(status = "error", status_detail_message = e.message ?: "Error al procesar PagoEfectivo")
+        }
+    }
+
+    override suspend fun getPasarelasActivas(request: PasarelasActivasRequest): ResponsePasarelasActivas {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}obtenerPasarelasActivas") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val responseBody = response.body<String>()
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponsePasarelasActivas>(responseBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+    override suspend fun tokenizarYapeMP(phoneNumber: String, otp: String, publicKey: String): YapeTokenResponse {
+        return try {
+            val deviceSession = fetchMpDeviceSession(null, publicKey)
+            val response = httpClient.post("https://api.mercadopago.com/platforms/pci/yape/v1/payment?public_key=$publicKey") {
+                contentType(ContentType.Application.Json)
+                header("Accept-Language", "es-PE")
+                if (deviceSession.isNotEmpty()) header("X-meli-session-id", deviceSession)
+                setBody(
+                    YapeTokenRequest(
+                        phoneNumber = phoneNumber,
+                        otp = otp,
+                        requestId = Random.nextLong().toString()
+                    )
+                )
+            }
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString(response.body<String>())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            YapeTokenResponse()
+        }
+    }
+
+    override suspend fun procesarPagoYape(request: YapeRequest): ResponseMercadoPago {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_MP}/api/checkout") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val bodyStr = response.body<String>()
+            println("[YAPE-RAW] ${response.status.value} | $bodyStr")
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString(bodyStr)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseMercadoPago(status = "error", status_detail_message = e.message ?: "Error al procesar pago Yape")
+        }
+    }
+
+    override suspend fun registrarPagoMP(request: RegisterPaymentRequest) {
+        try {
+            httpClient.post("${Constantes.BASE_ROOT_MP}/api/register-payment") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }

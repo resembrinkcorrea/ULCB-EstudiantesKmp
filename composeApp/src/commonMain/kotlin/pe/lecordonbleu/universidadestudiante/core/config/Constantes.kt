@@ -13,12 +13,13 @@ private data class ConfigEntorno(
     val urlPdfFlywirePecano: String,
     val envDomain: String,
     val returnDomain: String,
-    val returnTramite: String
+    val returnTramite: String,
+    val baseRootMercadoPago: String
 )
 
 object Constantes {
 
-    private val entornoActual = Entorno.PRODUCCION
+    private val entornoActual = Entorno.PREPRODUCCION
 
     private val config = when (entornoActual) {
         Entorno.DESARROLLO -> ConfigEntorno(
@@ -28,7 +29,8 @@ object Constantes {
             urlPdfFlywirePecano = "https://devintegracion.cordonbleu.edu.pe/resources/boleta/",
             envDomain = "demo",
             returnDomain = "https://devecommerce",
-            returnTramite = "https://devalumno"
+            returnTramite = "https://devalumno",
+            baseRootMercadoPago = "https://devmpago.ulcb.edu.pe"
         )
         Entorno.PREPRODUCCION -> ConfigEntorno(
             baseRootIntranet = "http://sslcbpsaa.eastus2.cloudapp.azure.com:8080",
@@ -37,7 +39,9 @@ object Constantes {
             urlPdfFlywirePecano = "https://preintegracion.cordonbleu.edu.pe/resources/boleta/",
             envDomain = "demo",
             returnDomain = "https://preecommerce",
-            returnTramite = "https://prealumno"
+            returnTramite = "https://prealumno",
+            baseRootMercadoPago = "https://devmpago.ulcb.edu.pe"
+
         )
         Entorno.PRODUCCION -> ConfigEntorno(
             baseRootIntranet = "http://sslcbpopen.eastus2.cloudapp.azure.com:8080",
@@ -46,7 +50,8 @@ object Constantes {
             urlPdfFlywirePecano = "https://integracion.cordonbleu.edu.pe/resources/boleta/",
             envDomain = "production",
             returnDomain = "https://ecommerce",
-            returnTramite = "https://alumno"
+            returnTramite = "https://alumno",
+            baseRootMercadoPago = "https://mpago.ulcb.edu.pe"
         )
     }
 
@@ -75,4 +80,6 @@ object Constantes {
 
     val RETURN_DOMAIN = config.returnDomain
     val RETURN_TRAMITE = config.returnTramite
+    val BASE_ROOT_MP = config.baseRootMercadoPago
+
 }

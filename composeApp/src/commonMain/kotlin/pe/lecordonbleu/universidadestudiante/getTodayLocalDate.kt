@@ -6,3 +6,4 @@ import kotlinx.datetime.LocalDateTime
 
 expect fun getTodayLocalDate(): LocalDate
 expect fun getTodayLocalDateTime(): LocalDateTime
+expect fun currentTimeMillis(): Long

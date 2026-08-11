@@ -37,6 +37,20 @@ kotlin {
             version = "2.7.0"
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
+
+        pod("MercadoPagoDevicesSDK") {
+            source = path("${project.projectDir}/local-pods/MercadoPagoDevicesSDK")
+        }
+
+        pod("MercadoPagoSDKCoreMethods") {
+            source = git("https://github.com/mercadopago/sdk-ios.git") { tag = "1.0.0" }
+            moduleName = "CoreMethods"
+        }
+
+        pod("MPCoreBridge") {
+            source = path("${project.projectDir}/local-pods/MPCoreBridge")
+        }
+
         framework {
             baseName = "ComposeApp"
             isStatic = true
@@ -65,6 +79,14 @@ kotlin {
             implementation("com.microsoft.identity.client:msal:5.2.0") {
                 exclude(group = "com.microsoft.device.display")
             }
+
+            // MercadoPago - device fingerprint para Checkout API
+            implementation("com.mercadolibre.android.device:sdk:4.0.1")
+
+            // MercadoPago - Core Methods SDK (tokenización PCI-compliant)
+            implementation(project.dependencies.platform("com.mercadopago.android.sdk:sdk-android-bom:0.2.3"))
+            implementation("com.mercadopago.android.sdk:core-methods")
+
         }
 
         commonMain.dependencies {

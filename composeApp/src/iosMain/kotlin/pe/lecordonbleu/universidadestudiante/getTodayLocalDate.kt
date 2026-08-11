@@ -46,3 +46,6 @@ actual fun getTodayLocalDateTime(): LocalDateTime {
         nanosecond = 0
     )
 }
+
+actual fun currentTimeMillis(): Long =
+    (NSDate().timeIntervalSinceReferenceDate * 1000).toLong() + 978307200000L
