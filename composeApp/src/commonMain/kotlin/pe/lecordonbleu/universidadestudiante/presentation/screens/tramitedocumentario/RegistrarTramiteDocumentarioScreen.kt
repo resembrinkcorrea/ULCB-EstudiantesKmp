@@ -106,7 +106,8 @@ fun RegistrarTramiteDocumentarioScreen(
     val colors = getColorsTheme()
     val focusManager = LocalFocusManager.current
     val settings = getSettingsStorage()
-    val idSistema = settings.getInt("idSistema", 0)
+    //val idSistema = settings.getInt("idSistema", 0)
+    val idSistema = 3
     val idUneg = Constantes.ID_UNEG
     val idEstud = settings.getInt("idEstud", 0)
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
@@ -1376,7 +1377,8 @@ fun RegistrarTramiteDocumentarioScreen(
                     MpPaymentSession.callbackId = Base64Encoder.encodeToBase64(pendingCallbackId).trim()
                     MpPaymentSession.monto = parseMontoTramite(pendingMonto)
                     MpPaymentSession.montoDisplay = pendingMonto
-                    MpPaymentSession.email = perfil.correo_personal
+                    //MpPaymentSession.email = perfil.correo_personal
+                    MpPaymentSession.email = "prueba@testuser.com"
                     MpPaymentSession.dni = perfil.numero_documento.toString()
                     MpPaymentSession.idUneg = idUneg
                     MpPaymentSession.externalReference = "APPTD-CARD-${currentTimeMillis()}-${randomAlphanumeric4()}"

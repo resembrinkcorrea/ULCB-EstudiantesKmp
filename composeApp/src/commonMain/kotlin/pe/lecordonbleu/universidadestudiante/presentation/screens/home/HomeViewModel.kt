@@ -24,6 +24,9 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
 import pe.lecordonbleu.universidadestudiante.domain.model.HorarioRequest
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 
 class HomeViewModel(private val repo: AppRepository) : ViewModel() {
@@ -247,13 +250,14 @@ class HomeViewModel(private val repo: AppRepository) : ViewModel() {
             _clasesHoyState.value = ResourceUiState.Loading
             try {
                 val hoy = getTodayLocalDate()
-                val fechaHoy = "${hoy.year}-${hoy.monthNumber.toString().padStart(2, '0')}-${hoy.dayOfMonth.toString().padStart(2, '0')}"
+                val siete = hoy.plus(DatePeriod(days = 7))
+                fun LocalDate.fmt() = "${year}-${monthNumber.toString().padStart(2, '0')}-${dayOfMonth.toString().padStart(2, '0')}"
                 val response = repo.getHorario(
                     HorarioRequest(
                         id_estud_pe = idEstudPe,
                         id_oacad_arranque = idOacadArranque,
-                        fecha_ini = fechaHoy,
-                        fecha_fin = fechaHoy
+                        fecha_ini = hoy.fmt(),
+                        fecha_fin = siete.fmt()
                     )
                 )
                 _clasesHoyState.value = ResourceUiState.Success(response)

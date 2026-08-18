@@ -65,6 +65,7 @@ import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.Cus
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseActualizarToken
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Horario
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
+import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDateTime
 import pe.lecordonbleu.universidadestudiante.util.openPdfFromBytes
 
@@ -493,8 +494,19 @@ fun HomeScreen(
     when (clasesHoyState) {
         is ResourceUiState.Success -> {
             val response = (clasesHoyState as ResourceUiState.Success<ResponseHorario>).data
-            clasesHoy = response.listadoHorario
-            if (!clasesHoyDismissed) showClasesHoy = true
+            val hoy = getTodayLocalDate()
+            val fechaHoyStr = "${hoy.year}-${hoy.monthNumber.toString().padStart(2, '0')}-${hoy.dayOfMonth.toString().padStart(2, '0')}"
+            val grupos = response.listadoHorario
+                .groupBy { it.hor_asis_dia }
+                .entries
+                .sortedBy { it.key }
+            val primerGrupo = grupos.firstOrNull()
+            clasesHoy = if (primerGrupo?.key == fechaHoyStr) {
+                grupos.take(2).flatMap { it.value }
+            } else {
+                primerGrupo?.value ?: emptyList()
+            }
+            if (clasesHoy.isNotEmpty() && !clasesHoyDismissed) showClasesHoy = true
         }
         else -> {}
     }

@@ -53,7 +53,7 @@ import ulcbintranetkmp.composeapp.generated.resources.imgdefault
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.DarkModeColors
 import pe.lecordonbleu.universidadestudiante.getPlatform
-import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
+import kotlinx.datetime.LocalDate
 import pe.lecordonbleu.universidadestudiante.core.theme.menuLabelFontFamily
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.DataMenu
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Horario
@@ -546,12 +546,29 @@ fun TarjetaClasesHoy(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val hoy = remember { getTodayLocalDate() }
     val diasSemana = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
-    val tituloFecha = "${diasSemana[hoy.dayOfWeek.ordinal]} ${hoy.dayOfMonth}"
-    val clasesAgrupadas = remember(clases) { agruparHorasClase(clases) }
+
+    fun labelFecha(diaStr: String): String {
+        return try {
+            val p = diaStr.split("-")
+            val fecha = LocalDate(p[0].toInt(), p[1].toInt(), p[2].toInt())
+            "${diasSemana[fecha.dayOfWeek.ordinal]} ${fecha.dayOfMonth}"
+        } catch (e: Exception) { diaStr }
+    }
+
+    val gruposPorDia = remember(clases) {
+        clases.groupBy { it.hor_asis_dia }
+            .entries
+            .sortedBy { it.key }
+            .map { it.key to agruparHorasClase(it.value) }
+    }
+
+    val primerGrupo  = gruposPorDia.firstOrNull()
+    val segundoGrupo = gruposPorDia.getOrNull(1)
+    val clasesHoy    = primerGrupo?.second ?: emptyList()
+    val extras       = clasesHoy.drop(1)
+    val tituloFecha  = primerGrupo?.first?.let { labelFecha(it) } ?: ""
     var expandida by remember { mutableStateOf(false) }
-    val extras = clasesAgrupadas.drop(1)
 
     Surface(
         shape = RoundedCornerShape(24.dp),
@@ -581,7 +598,7 @@ fun TarjetaClasesHoy(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "MIS CLASES DE HOY",
+                            text = "PRÓXIMAS CLASES",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = colors.textColor.copy(alpha = 0.5f),
@@ -615,16 +632,16 @@ fun TarjetaClasesHoy(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (clasesAgrupadas.isEmpty()) {
+            if (gruposPorDia.isEmpty()) {
                 Text(
-                    text = "No tiene clases programadas para el dia hoy.",
+                    text = "No tiene clases programadas.",
                     color = colors.textColor.copy(alpha = 0.5f),
                     fontSize = 13.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             } else {
                 ClaseCard(
-                    item = clasesAgrupadas.first(),
+                    item = clasesHoy.first(),
                     paddingStart = 0.dp,
                     showExpandIcon = false,
                     applyTopPadding = true
@@ -643,7 +660,6 @@ fun TarjetaClasesHoy(
                             }
                         }
                     }
-
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
                         horizontalArrangement = Arrangement.Center
@@ -674,6 +690,33 @@ fun TarjetaClasesHoy(
                                 )
                             }
                         }
+                    }
+                }
+
+                if (segundoGrupo != null) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(modifier = Modifier.weight(1f).height(1.dp).background(colors.colorGrisNeutro.copy(alpha = 0.4f)))
+                        Text(
+                            text = "  ${labelFecha(segundoGrupo.first)}  ",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.colorGrisNeutro,
+                            letterSpacing = 0.5.sp
+                        )
+                        Box(modifier = Modifier.weight(1f).height(1.dp).background(colors.colorGrisNeutro.copy(alpha = 0.4f)))
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    segundoGrupo.second.forEach { clase ->
+                        ClaseCard(
+                            item = clase,
+                            paddingStart = 0.dp,
+                            showExpandIcon = false,
+                            applyTopPadding = true
+                        )
                     }
                 }
             }

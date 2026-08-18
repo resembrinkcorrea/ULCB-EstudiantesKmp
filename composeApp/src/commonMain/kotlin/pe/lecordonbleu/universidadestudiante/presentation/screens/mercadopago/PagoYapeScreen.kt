@@ -85,8 +85,8 @@ fun PagoYapeScreen(
     val session = MpPaymentSession
     val platformContext = getPlatformContext()
     val description = if (session.tipo == "APPTD") "Pago Tramite Documentario ULCB" else "Pago Cuenta Corriente ULCB"
-    //var email by remember { mutableStateOf("prueba@testuser.com") }
-    var email by remember { mutableStateOf(session.email) }
+    var email by remember { mutableStateOf("prueba@testuser.com") }
+    //var email by remember { mutableStateOf(session.email) }
 
     LaunchedEffect(Unit) {
         initMpDevice(platformContext)

@@ -34,7 +34,6 @@ import kotlinx.datetime.LocalDate
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.EstadoTramite
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.TipoTramite
-import pe.lecordonbleu.universidadestudiante.data.remote.dto.Tramite
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import pe.lecordonbleu.universidadestudiante.presentation.components.AppDropdownMenu
 
@@ -42,13 +41,10 @@ import pe.lecordonbleu.universidadestudiante.presentation.components.AppDropdown
 fun FiltrosTramiteExpandable(
     estados: List<EstadoTramite>,
     tiposTramite: List<TipoTramite>,
-    tramites: List<Tramite>,
     selectedEstado: EstadoTramite?,
     selectedTipoTramite: TipoTramite?,
-    selectedTramite: Tramite?,
     onEstadoSelected: (EstadoTramite) -> Unit,
     onTipoTramiteSelected: (TipoTramite) -> Unit,
-    onTramiteSelected: (Tramite) -> Unit,
     fechaInicio: String,
     fechaFin: String,
     onFechaInicioChange: (String) -> Unit,
@@ -126,16 +122,6 @@ fun FiltrosTramiteExpandable(
                             )
                         }
                     }
-
-                    Spacer(modifier = Modifier.size(12.dp))
-
-                    AppDropdownMenu(
-                        items = tramites,
-                        selectedItem = selectedTramite ?: tramites.firstOrNull(),
-                        label = "Selecciona un trámite específico",
-                        itemLabel = { if (it.nombre == "SELECCIONE") "TODOS" else it.nombre },
-                        onItemSelected = onTramiteSelected
-                    )
 
                     Spacer(modifier = Modifier.size(12.dp))
 

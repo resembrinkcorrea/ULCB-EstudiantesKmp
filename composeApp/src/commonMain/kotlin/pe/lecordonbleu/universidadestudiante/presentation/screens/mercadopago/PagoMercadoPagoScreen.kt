@@ -125,8 +125,8 @@ fun PagoMercadoPagoScreen(
     var selectedMethod by remember { mutableStateOf(MetodoPago.TARJETA) }
 
     // Tarjeta
-    //var email by remember { mutableStateOf("prueba@testuser.com") }
-    var email by remember { mutableStateOf(session.email) }
+    var email by remember { mutableStateOf("prueba@testuser.com") }
+    //var email by remember { mutableStateOf(session.email) }
     var tipoDocumento by remember { mutableStateOf(TipoDocumentoMP.DNI) }
     var numeroDocumento by remember { mutableStateOf(session.dni) }
     var dropdownExpanded by remember { mutableStateOf(false) }
