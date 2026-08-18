@@ -415,8 +415,11 @@ fun RegistrarTramiteDocumentarioScreen(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = colors.textColor,
                     unfocusedTextColor = colors.textColor,
-                    focusedBorderColor = colors.secondary,
-                    unfocusedBorderColor = colors.colorGrisNeutro
+                    focusedBorderColor = colors.colorMixPrimary,
+                    unfocusedBorderColor = colors.colorGrisNeutro,
+                    focusedLabelColor = colors.colorMixPrimary,
+                    unfocusedLabelColor = colors.textColor.copy(alpha = 0.6f),
+                    cursorColor = colors.colorMixPrimary
                 )
             )
 
@@ -1377,8 +1380,8 @@ fun RegistrarTramiteDocumentarioScreen(
                     MpPaymentSession.callbackId = Base64Encoder.encodeToBase64(pendingCallbackId).trim()
                     MpPaymentSession.monto = parseMontoTramite(pendingMonto)
                     MpPaymentSession.montoDisplay = pendingMonto
-                    //MpPaymentSession.email = perfil.correo_personal
-                    MpPaymentSession.email = "prueba@testuser.com"
+                    MpPaymentSession.email = perfil.correo_personal
+                    //MpPaymentSession.email = "prueba@testuser.com"
                     MpPaymentSession.dni = perfil.numero_documento.toString()
                     MpPaymentSession.idUneg = idUneg
                     MpPaymentSession.externalReference = "APPTD-CARD-${currentTimeMillis()}-${randomAlphanumeric4()}"
@@ -1398,7 +1401,11 @@ fun RegistrarTramiteDocumentarioScreen(
             onConfirm = { recoger, dni, nombre ->
                 datosRecojo = DatosRecojo(dni = dni, nombres = nombre, recoger = recoger)
                 showDialogRecojo = false
-            }
+            },
+            colors = colors,
+            initialRecojo = datosRecojo.recoger == 1,
+            initialDni = datosRecojo.dni,
+            initialNombres = datosRecojo.nombres
         )
     }
 
