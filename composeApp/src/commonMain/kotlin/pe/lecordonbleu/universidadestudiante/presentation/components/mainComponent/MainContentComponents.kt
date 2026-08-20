@@ -72,6 +72,9 @@ fun HomeContent(
     onNavigate: (String) -> Unit,
     showFichaMatri: Boolean = false,
     isFichaMatriLoading: Boolean = false,
+    matricUrl: String = "",
+    flagProyeccion: Int = 0,
+    idMatric: Int = 0,
     onFichaMatriClick: () -> Unit = {},
     clasesHoy: List<Horario> = emptyList(),
     showClasesHoy: Boolean = false,
@@ -142,6 +145,11 @@ fun HomeContent(
             ) {
                 BtnFichaMatricula(
                     isLoading = isFichaMatriLoading,
+                    label = when {
+                        flagProyeccion > 0 && idMatric > 0 -> "Ficha Matrícula"
+                        flagProyeccion > 0                 -> "Ficha PreMatrícula"
+                        else                               -> "Ficha Proyección"
+                    },
                     colors = colors,
                     onClick = onFichaMatriClick
                 )
@@ -727,6 +735,7 @@ fun TarjetaClasesHoy(
 @Composable
 fun BtnFichaMatricula(
     isLoading: Boolean,
+    label: String = "Ficha Proyección",
     colors: DarkModeColors,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -751,7 +760,7 @@ fun BtnFichaMatricula(
                 Spacer(modifier = Modifier.width(10.dp))
             }
             Text(
-                text = "Ficha Proyección",
+                text = label,
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

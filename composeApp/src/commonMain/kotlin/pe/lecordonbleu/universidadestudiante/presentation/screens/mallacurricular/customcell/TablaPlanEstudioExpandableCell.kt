@@ -1,6 +1,7 @@
 package pe.lecordonbleu.universidadestudiante.presentation.screens.mallacurricular.customcell
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseTablaPlan
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
@@ -37,14 +39,18 @@ fun TablaPlanEstudioExpandableCell(
     }
 
     val colors = getColorsTheme()
+    val isDarkMode = isSystemInDarkTheme()
+    val colorCicloCompletado = if (isDarkMode) Color(0xFF0D2A40) else Color(0xFFBBDEFB)
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         grupos.forEach { (ciclo, asignaturas) ->
             val expandido = cicloExpandido == ciclo
+            val todosCompletados = asignaturas.all { it.ESTADO_MALLA == "Cursado" }
+            val cardColor = if (todosCompletados) colorCicloCompletado else colors.colorPastelAzul
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = colors.colorPastelAzul),
+                colors = CardDefaults.cardColors(containerColor = cardColor),
                 onClick = { onExpandToggle(ciclo) }
             ) {
                 Row(

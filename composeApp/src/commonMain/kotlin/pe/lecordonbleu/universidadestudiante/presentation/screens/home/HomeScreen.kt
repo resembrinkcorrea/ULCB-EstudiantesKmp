@@ -123,6 +123,9 @@ fun HomeScreen(
     val fichaMatrState by viewModel.fichaMatrState.collectAsStateWithLifecycle()
     var showFichaMatri by remember { mutableStateOf(false) }
     var isFichaMatriLoading by remember { mutableStateOf(false) }
+    var matricUrl by remember { mutableStateOf("") }
+    var flagProyeccion by remember { mutableStateOf(0) }
+    var idMatric by remember { mutableStateOf(0) }
     val clasesHoyState by viewModel.clasesHoyState.collectAsStateWithLifecycle()
     var clasesHoy by remember { mutableStateOf<List<Horario>>(emptyList()) }
     var showClasesHoy by remember { mutableStateOf(false) }
@@ -285,6 +288,9 @@ fun HomeScreen(
                         colors = colors,
                         showFichaMatri = showFichaMatri,
                         isFichaMatriLoading = isFichaMatriLoading,
+                        matricUrl = matricUrl,
+                        flagProyeccion = flagProyeccion,
+                        idMatric = idMatric,
                         clasesHoy = clasesHoy,
                         showClasesHoy = showClasesHoy,
                         onClasesHoyClose = {
@@ -292,6 +298,11 @@ fun HomeScreen(
                             clasesHoyDismissed = true
                         },
                         onFichaMatriClick = {
+                            if (matricUrl.isNotEmpty() && matricUrl != "0") {
+                                openUrl(platformContext, matricUrl)
+                            } else if (flagProyeccion > 0 && idMatric > 0) {
+                                // matriculado pero URL aún no generada
+                            } else {
                             val now = getTodayLocalDateTime()
                             val meses = listOf("enero","febrero","marzo","abril","mayo","junio",
                                 "julio","agosto","septiembre","octubre","noviembre","diciembre")
@@ -317,6 +328,7 @@ fun HomeScreen(
                                 promUltMat = settingsStorage.getString("promedioUltMatricula", "").orEmpty()
                             )
                             viewModel.fetchFichaMatricula()
+                            }
                         },
                         onMenuClick = { menu ->
                             when (menu.textoMenuAbrev) {
@@ -405,6 +417,9 @@ fun HomeScreen(
                 settingsStorage.putString("estadoIngresante", lista[0].estado_ingresante.toString())
                 settingsStorage.putString("promedioUltMatricula", lista[0].promedio_ult_matricula)
                 if (lista[0].id_proce_mat == 1) showFichaMatri = true
+                matricUrl = lista[0].matric_url
+                flagProyeccion = lista[0].flag_proyeccion
+                idMatric = lista[0].id_matric
                 if (!encuestaDocenteLanzada) {
                     encuestaDocenteLanzada = true
                     viewModel.fetchEncuestaDocente(
