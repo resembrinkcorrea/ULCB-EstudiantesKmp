@@ -50,6 +50,7 @@ import pe.lecordonbleu.universidadestudiante.logout
 import pe.lecordonbleu.universidadestudiante.openMicrosoftMFA
 import pe.lecordonbleu.universidadestudiante.openMicrosoftPasswordChange
 import pe.lecordonbleu.universidadestudiante.util.openUrl
+import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestadocente.AlertDialogEncuestas
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestasatisfaccion.EncuestaSatisfaccionDialog
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestadocente.LlenarEncuestaDialog
@@ -355,7 +356,12 @@ fun HomeScreen(
                                 "MIS AVISOS" -> {
                                     navigator.navigate("/misavisos")
                                 }
-                                "VER BOUTIQUE" -> openUrl(platformContext, "https://ecommerce.ulcb.edu.pe/pages/")
+                                "VER BOUTIQUE" -> {
+                                    val dni = settingsStorage.getString("numDocuIden", "").orEmpty()
+                                    val urlBoutique = "${Constantes.RETURN_DOMAIN}.ulcb.edu.pe/UsuarioPersonaServletAPP?accion=autoLogin&u=$dni"
+                                    println("VER BOUTIQUE URL: $urlBoutique")
+                                    openUrl(platformContext, urlBoutique)
+                                }
                             }
                         },
                         onNavigate = { route -> navigator.navigate(route) }
@@ -364,7 +370,6 @@ fun HomeScreen(
             }
         }
     }
-
 
     when (uiState) {
         is ResourceUiState.Success -> {

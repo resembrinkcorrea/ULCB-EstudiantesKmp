@@ -344,6 +344,7 @@ fun LoginScreenMicrosoftView(viewModel: LoginMicrosoftViewModel, navigator: NavC
             val persNombre      = firstUser?.personaNombre ?: ""
             val persApellidoPat = firstUser?.pers_apellido_pat ?: ""
             val persApellidoMat = firstUser?.pers_apellido_mat ?: ""
+            val numDocuIden     = firstUser?.num_docu_iden_pd ?: ""
 
             settingsStorage.putInt("idSistema", idSistema)
             settingsStorage.putInt("idPerfil", idPerfil)
@@ -358,6 +359,7 @@ fun LoginScreenMicrosoftView(viewModel: LoginMicrosoftViewModel, navigator: NavC
             settingsStorage.putString("persNombre", persNombre)
             settingsStorage.putString("persApellidoPat", persApellidoPat)
             settingsStorage.putString("persApellidoMat", persApellidoMat)
+            settingsStorage.putString("numDocuIden", numDocuIden)
 
             if (rememberMeState) {
                 settingsStorage.putString("Email", emailUser)

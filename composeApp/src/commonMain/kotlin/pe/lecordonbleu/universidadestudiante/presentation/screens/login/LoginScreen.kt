@@ -447,6 +447,7 @@ fun LoginScreen(
             val idAtribp          = firstUser?.id_atribp ?: 0
             val idEstud           = firstUser?.id_estud ?: 0
             val idUsuarioLogueo   = jsonGeneral?.data1?.firstOrNull()?.id_usuario_logueo ?: 0
+            val numDocuIden       = firstUser?.num_docu_iden_pd ?: ""
 
             settingsStorage.putInt("idSistema", idSistema)
             settingsStorage.putInt("idPerfil", idPerfil)
@@ -464,6 +465,7 @@ fun LoginScreen(
             settingsStorage.putInt("idAtribp", idAtribp)
             settingsStorage.putInt("idEstud", idEstud)
             settingsStorage.putInt("idUsuarioLogueo", idUsuarioLogueo)
+            settingsStorage.putString("numDocuIden", numDocuIden)
 
             if (rememberMeState) {
                 settingsStorage.putString("Email", emailUser)
