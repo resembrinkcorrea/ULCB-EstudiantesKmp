@@ -161,6 +161,8 @@ import pe.lecordonbleu.universidadestudiante.domain.model.ValidarEgresadoRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.ValidarInicioMatriculaRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.YapeRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenResponse
+import pe.lecordonbleu.universidadestudiante.domain.model.ArchivosObligatoriosRequest
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseArchivosObligatorios
 
 interface AppRepository {
     suspend fun getMenuDataUser(userRequest: UserMenuRequest): List<ResponseDataMenu>
@@ -269,4 +271,6 @@ interface AppRepository {
 
     suspend fun procesarPagoYape(request: YapeRequest): ResponseMercadoPago
     suspend fun registrarPagoMP(request: RegisterPaymentRequest)
+
+    suspend fun getArchivosObligatorios(request: ArchivosObligatoriosRequest): ResponseArchivosObligatorios
 }

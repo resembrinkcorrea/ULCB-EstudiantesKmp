@@ -2,6 +2,8 @@ package pe.lecordonbleu.universidadestudiante.presentation.components.mainCompon
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,12 +23,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.TableRows
+import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,11 +58,16 @@ import ulcbintranetkmp.composeapp.generated.resources.Res
 import ulcbintranetkmp.composeapp.generated.resources.imgdefault
 import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.DarkModeColors
+import pe.lecordonbleu.universidadestudiante.getSettingsStorage
 import pe.lecordonbleu.universidadestudiante.getPlatform
 import kotlinx.datetime.LocalDate
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbGrisClaro
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbPastelGris
 import pe.lecordonbleu.universidadestudiante.core.theme.menuLabelFontFamily
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ArchivoObligatorio
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.DataMenu
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Horario
+import pe.lecordonbleu.universidadestudiante.presentation.screens.home.customcell.CardArchivosObligatorios
 import pe.lecordonbleu.universidadestudiante.domain.usecase.agruparHorasClase
 import pe.lecordonbleu.universidadestudiante.presentation.screens.horario.customcell.ClaseCard
 
@@ -78,7 +89,10 @@ fun HomeContent(
     onFichaMatriClick: () -> Unit = {},
     clasesHoy: List<Horario> = emptyList(),
     showClasesHoy: Boolean = false,
-    onClasesHoyClose: () -> Unit = {}
+    onClasesHoyClose: () -> Unit = {},
+    archivosObligatorios: List<ArchivoObligatorio> = emptyList(),
+    showArchivosObligatorios: Boolean = false,
+    onArchivosObligatoriosClose: () -> Unit = {}
 ) {
     if (isLoading && menus.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -120,8 +134,25 @@ fun HomeContent(
 
         TarjetaEstadoCuenta(colors = colors, onClick = { onNavigate("/cuentaCorriente") })
 
+        Text(
+            text = "* Activa o desactiva secciones desde el menú lateral",
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            color = colors.textColor.copy(alpha = 0.5f),
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+
         if (showClasesHoy) {
             TarjetaClasesHoy(clases = clasesHoy, colors = colors, onClose = onClasesHoyClose)
+        }
+
+        if (showArchivosObligatorios) {
+            CardArchivosObligatorios(
+                archivos = archivosObligatorios,
+                colors = colors,
+                onClose = onArchivosObligatoriosClose
+            )
         }
 
         val excludedKeys = listOf(
@@ -481,63 +512,173 @@ fun SeccionMasServicios(
         colors.colorAzulCielo         // 8 → PastelRosa (ciclo)
     )
 
+    val settings = remember { getSettingsStorage() }
+    var modoLista by remember { mutableStateOf(settings.getInt("mas_servicios_modo_lista", 0) == 1) }
+    val isDark = isSystemInDarkTheme()
+    val listaAlternateColors = listOf(IlcbGrisClaro, IlcbPastelGris)
+
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = "MÁS SERVICIOS",
-            color = colors.textColor.copy(alpha = 0.5f),
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            letterSpacing = 1.sp,
-            modifier = Modifier.padding(start = 4.dp, bottom = 16.dp)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "MÁS SERVICIOS",
+                color = colors.textColor.copy(alpha = 0.5f),
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                letterSpacing = 1.sp,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Icon(
+                    imageVector = Icons.Default.GridView,
+                    contentDescription = "Ver en cuadrícula",
+                    tint = if (!modoLista) colors.colorEsmeralda else colors.colorGrisNeutro.copy(alpha = 0.5f),
+                    modifier = Modifier.size(22.dp).clickable {
+                        modoLista = false
+                        settings.putInt("mas_servicios_modo_lista", 0)
+                    }
+                )
+                Icon(
+                    imageVector = Icons.Default.TableRows,
+                    contentDescription = "Ver en lista",
+                    tint = if (modoLista) colors.colorEsmeralda else colors.colorGrisNeutro.copy(alpha = 0.5f),
+                    modifier = Modifier.size(22.dp).clickable {
+                        modoLista = true
+                        settings.putInt("mas_servicios_modo_lista", 1)
+                    }
+                )
+            }
+        }
 
-        androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val columns = if (maxWidth > 600.dp) 6 else 4
-            val itemWidth = maxWidth / columns
-
-            Column {
-                menus.chunked(columns).forEach { fila ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                        horizontalArrangement = Arrangement.Start
+        if (modoLista) {
+            val grupos = mutableListOf<Pair<List<DataMenu>, Int>>()
+            var idx = 0
+            var filaIdx = 0
+            var usarTres = true
+            while (idx < menus.size) {
+                val tam = if (usarTres) 3 else 2
+                grupos.add(menus.subList(idx, minOf(idx + tam, menus.size)) to filaIdx)
+                idx += tam
+                filaIdx++
+                usarTres = !usarTres
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                grupos.forEach { (grupo, gIdx) ->
+                    val bgColor = if (isDark) backgroundColors[gIdx % backgroundColors.size]
+                                  else listaAlternateColors[gIdx % listaAlternateColors.size]
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = bgColor,
+                        shadowElevation = 2.dp,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        fila.forEach { menu ->
-                            val i = menus.indexOf(menu)
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.width(itemWidth)
-                            ) {
+                        Column {
+                            grupo.forEachIndexed { itemIdx, menu ->
+                                val i = menus.indexOf(menu)
                                 Surface(
                                     onClick = { onClick(menu) },
-                                    shape = RoundedCornerShape(20.dp),
-                                    color = backgroundColors[i % backgroundColors.size],
-                                    shadowElevation = 2.dp,
-                                    modifier = Modifier.size(64.dp)
+                                    color = Color.Transparent,
+                                    modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        AsyncImage(
-                                            model = menu.imagen,
-                                            contentDescription = menu.textoMenu,
-                                            contentScale = ContentScale.Fit,
-                                            colorFilter = ColorFilter.tint(accentColors[i % accentColors.size]),
-                                            modifier = Modifier.size(32.dp).padding(2.dp),
-                                            error = painterResource(Res.drawable.imgdefault)
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(36.dp)
+                                                .background(accentColors[i % accentColors.size].copy(alpha = 0.12f), RoundedCornerShape(10.dp)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            AsyncImage(
+                                                model = menu.imagen,
+                                                contentDescription = menu.textoMenu,
+                                                contentScale = ContentScale.Fit,
+                                                colorFilter = ColorFilter.tint(accentColors[i % accentColors.size]),
+                                                modifier = Modifier.size(20.dp),
+                                                error = painterResource(Res.drawable.imgdefault)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.width(14.dp))
+                                        Text(
+                                            text = menu.textoMenu,
+                                            color = colors.textColor.copy(alpha = 0.85f),
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Rounded.ChevronRight,
+                                            contentDescription = null,
+                                            tint = colors.textColor.copy(alpha = 0.3f),
+                                            modifier = Modifier.size(18.dp)
                                         )
                                     }
                                 }
-                                Spacer(modifier = Modifier.height(8.dp))
-                                val isIos = getPlatform().name.contains("iOS", ignoreCase = true)
-                                Text(
-                                    text = menu.textoMenu,
-                                    color = colors.textColor.copy(alpha = 0.8f),
-                                    fontSize = if (isIos) 9.5.sp else 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = menuLabelFontFamily(),
-                                    textAlign = TextAlign.Center,
-                                    lineHeight = if (isIos) 11.5.sp else 13.sp,
-                                    maxLines = 2,
-                                    modifier = Modifier.padding(horizontal = 4.dp)
-                                )
+                                if (itemIdx < grupo.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(start = 66.dp),
+                                        thickness = 0.5.dp,
+                                        color = colors.textColor.copy(alpha = 0.1f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            androidx.compose.foundation.layout.BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val columns = if (maxWidth > 600.dp) 6 else 4
+                val itemWidth = maxWidth / columns
+
+                Column {
+                    menus.chunked(columns).forEach { fila ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            fila.forEach { menu ->
+                                val i = menus.indexOf(menu)
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.width(itemWidth)
+                                ) {
+                                    Surface(
+                                        onClick = { onClick(menu) },
+                                        shape = RoundedCornerShape(20.dp),
+                                        color = backgroundColors[i % backgroundColors.size],
+                                        shadowElevation = 2.dp,
+                                        modifier = Modifier.size(64.dp)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            AsyncImage(
+                                                model = menu.imagen,
+                                                contentDescription = menu.textoMenu,
+                                                contentScale = ContentScale.Fit,
+                                                colorFilter = ColorFilter.tint(accentColors[i % accentColors.size]),
+                                                modifier = Modifier.size(32.dp).padding(2.dp),
+                                                error = painterResource(Res.drawable.imgdefault)
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    val isIos = getPlatform().name.contains("iOS", ignoreCase = true)
+                                    Text(
+                                        text = menu.textoMenu,
+                                        color = colors.textColor.copy(alpha = 0.8f),
+                                        fontSize = if (isIos) 9.5.sp else 11.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = menuLabelFontFamily(),
+                                        textAlign = TextAlign.Center,
+                                        lineHeight = if (isIos) 11.5.sp else 13.sp,
+                                        maxLines = 2,
+                                        modifier = Modifier.padding(horizontal = 4.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -577,6 +718,7 @@ fun TarjetaClasesHoy(
     val extras       = clasesHoy.drop(1)
     val tituloFecha  = primerGrupo?.first?.let { labelFecha(it) } ?: ""
     var expandida by remember { mutableStateOf(false) }
+    var expandidaSegundo by remember { mutableStateOf(false) }
 
     Surface(
         shape = RoundedCornerShape(24.dp),
@@ -702,6 +844,8 @@ fun TarjetaClasesHoy(
                 }
 
                 if (segundoGrupo != null) {
+                    val clasesSegundo = segundoGrupo.second
+                    val extrasSegundo = clasesSegundo.drop(1)
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -718,13 +862,56 @@ fun TarjetaClasesHoy(
                         Box(modifier = Modifier.weight(1f).height(1.dp).background(colors.colorGrisNeutro.copy(alpha = 0.4f)))
                     }
                     Spacer(modifier = Modifier.height(4.dp))
-                    segundoGrupo.second.forEach { clase ->
-                        ClaseCard(
-                            item = clase,
-                            paddingStart = 0.dp,
-                            showExpandIcon = false,
-                            applyTopPadding = true
-                        )
+                    ClaseCard(
+                        item = clasesSegundo.first(),
+                        paddingStart = 0.dp,
+                        showExpandIcon = false,
+                        applyTopPadding = true
+                    )
+                    if (extrasSegundo.isNotEmpty()) {
+                        AnimatedVisibility(visible = expandidaSegundo) {
+                            Column {
+                                extrasSegundo.forEach { clase ->
+                                    ClaseCard(
+                                        item = clase,
+                                        paddingStart = 0.dp,
+                                        showExpandIcon = false,
+                                        applyTopPadding = true
+                                    )
+                                }
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Surface(
+                                onClick = { expandidaSegundo = !expandidaSegundo },
+                                shape = RoundedCornerShape(20.dp),
+                                color = colors.colorMixPrimary.copy(alpha = 0.1f)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                                ) {
+                                    Text(
+                                        text = if (expandidaSegundo) "Ver menos"
+                                               else "Ver ${extrasSegundo.size} ${if (extrasSegundo.size == 1) "clase más" else "clases más"}",
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = colors.colorMixPrimary
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Icon(
+                                        imageVector = if (expandidaSegundo) Icons.Default.KeyboardArrowUp
+                                                      else Icons.Default.KeyboardArrowDown,
+                                        contentDescription = null,
+                                        tint = colors.colorMixPrimary,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -20,6 +20,8 @@ import pe.lecordonbleu.universidadestudiante.domain.repository.AppRepository
 import pe.lecordonbleu.universidadestudiante.domain.model.FcmTokenRequest
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseActualizarToken
 import pe.lecordonbleu.universidadestudiante.domain.model.FichaMatriculaRequest
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ArchivoObligatorio
+import pe.lecordonbleu.universidadestudiante.domain.model.ArchivosObligatoriosRequest
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
 import pe.lecordonbleu.universidadestudiante.domain.model.HorarioRequest
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
@@ -47,6 +49,8 @@ class HomeViewModel(private val repo: AppRepository) : ViewModel() {
         MutableStateFlow<ResourceUiState<ByteArray>>(ResourceUiState.Empty)
     private val _clasesHoyState =
         MutableStateFlow<ResourceUiState<ResponseHorario>>(ResourceUiState.Empty)
+    private val _archivosObligatoriosState =
+        MutableStateFlow<ResourceUiState<List<ArchivoObligatorio>>>(ResourceUiState.Empty)
 
     val uiState = _uiState.asStateFlow()
     val uiStateHora = _uiStateHora.asStateFlow()
@@ -57,11 +61,12 @@ class HomeViewModel(private val repo: AppRepository) : ViewModel() {
     val fcmTokenState = _fcmTokenState.asStateFlow()
     val fichaMatrState = _fichaMatrState.asStateFlow()
     val clasesHoyState = _clasesHoyState.asStateFlow()
+    val archivosObligatoriosState = _archivosObligatoriosState.asStateFlow()
 
     private lateinit var userMenuRequest: UserMenuRequest
     private lateinit var fcmTokenRequest: FcmTokenRequest
-
     private lateinit var fichaMatriculaRequest: FichaMatriculaRequest
+    private lateinit var archivosObligatoriosRequest: ArchivosObligatoriosRequest
 
     fun setUserMenuRequest(id_uneg: Int, id_sistema: Int, id_perfil: Int) {
         userMenuRequest =
@@ -269,5 +274,30 @@ class HomeViewModel(private val repo: AppRepository) : ViewModel() {
 
     fun resetClasesHoyState() {
         _clasesHoyState.value = ResourceUiState.Empty
+    }
+
+    fun setArchivosObligatorios(idUneg: Int, idEstud: Int, idServ: Int, idUsuario: Int, idTipoUsuario: Int) {
+        archivosObligatoriosRequest = ArchivosObligatoriosRequest(idUneg, idEstud, idServ, idUsuario, idTipoUsuario)
+        fetchArchivosObligatorios()
+    }
+
+    private fun fetchArchivosObligatorios() {
+        viewModelScope.launch {
+            _archivosObligatoriosState.value = ResourceUiState.Loading
+            try {
+                val response = repo.getArchivosObligatorios(archivosObligatoriosRequest)
+                val lista = response.listadoArchivosObligatorios
+                _archivosObligatoriosState.value = if (lista.isNotEmpty())
+                    ResourceUiState.Success(lista)
+                else
+                    ResourceUiState.Empty
+            } catch (e: Exception) {
+                _archivosObligatoriosState.value = ResourceUiState.Empty
+            }
+        }
+    }
+
+    fun resetArchivosObligatoriosState() {
+        _archivosObligatoriosState.value = ResourceUiState.Empty
     }
 }

@@ -66,6 +66,7 @@ import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.Cus
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseActualizarToken
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Horario
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ArchivoObligatorio
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDateTime
 import pe.lecordonbleu.universidadestudiante.util.openPdfFromBytes
@@ -129,9 +130,16 @@ fun HomeScreen(
     var idMatric by remember { mutableStateOf(0) }
     val clasesHoyState by viewModel.clasesHoyState.collectAsStateWithLifecycle()
     var clasesHoy by remember { mutableStateOf<List<Horario>>(emptyList()) }
+    var toggleProximasClases by remember { mutableStateOf(settingsStorage.getInt("mostrar_proximas_clases", 1) == 1) }
+    var toggleArchivosObligatorios by remember { mutableStateOf(settingsStorage.getInt("mostrar_archivos_obligatorios", 1) == 1) }
     var showClasesHoy by remember { mutableStateOf(false) }
     var clasesHoyDismissed by remember { mutableStateOf(false) }
     var clasesHoyLanzada by remember { mutableStateOf(false) }
+    val archivosObligatoriosState by viewModel.archivosObligatoriosState.collectAsStateWithLifecycle()
+    var archivosObligatorios by remember { mutableStateOf<List<ArchivoObligatorio>>(emptyList()) }
+    var showArchivosObligatorios by remember { mutableStateOf(false) }
+    var archivosObligatoriosDismissed by remember { mutableStateOf(false) }
+    var archivosObligatoriosLanzado by remember { mutableStateOf(false) }
 
     val token = getFcmToken()
     val tokenGuardado = settingsStorage.getString("fcm_token")
@@ -235,7 +243,19 @@ fun HomeScreen(
                         })
                     }
                 },
-                onGoProfile = { navigator.navigate("/perfilEstudiante") }
+                onGoProfile = { navigator.navigate("/perfilEstudiante") },
+                showProximasClases = toggleProximasClases,
+                onProximasClasesToggle = { enabled ->
+                    toggleProximasClases = enabled
+                    settingsStorage.putInt("mostrar_proximas_clases", if (enabled) 1 else 0)
+                    if (!enabled) showClasesHoy = false else clasesHoyLanzada = false
+                },
+                showArchivosObligatorios = toggleArchivosObligatorios,
+                onArchivosObligatoriosToggle = { enabled ->
+                    toggleArchivosObligatorios = enabled
+                    settingsStorage.putInt("mostrar_archivos_obligatorios", if (enabled) 1 else 0)
+                    if (!enabled) showArchivosObligatorios = false else archivosObligatoriosLanzado = false
+                }
             )
         }
     ) {
@@ -364,7 +384,13 @@ fun HomeScreen(
                                 }
                             }
                         },
-                        onNavigate = { route -> navigator.navigate(route) }
+                        onNavigate = { route -> navigator.navigate(route) },
+                        archivosObligatorios = archivosObligatorios,
+                        showArchivosObligatorios = showArchivosObligatorios,
+                        onArchivosObligatoriosClose = {
+                            showArchivosObligatorios = false
+                            archivosObligatoriosDismissed = true
+                        }
                     )
                 }
             }
@@ -434,11 +460,29 @@ fun HomeScreen(
                         idOacadArranque = lista[0].id_oacad_arranque
                     )
                 }
-                if (!clasesHoyLanzada) {
+                if (!clasesHoyLanzada && toggleProximasClases) {
                     clasesHoyLanzada = true
                     viewModel.fetchClasesHoy(lista[0].id_estud_pe, lista[0].id_oacad_arranque)
                 }
+                if (!archivosObligatoriosLanzado && toggleArchivosObligatorios) {
+                    archivosObligatoriosLanzado = true
+                    viewModel.setArchivosObligatorios(
+                        idUneg = settingsStorage.getInt("idUneg", 1),
+                        idEstud = settingsStorage.getInt("idEstud", 0),
+                        idServ = settingsStorage.getInt("idServ", 0),
+                        idUsuario = settingsStorage.getInt("idUsuario", 0),
+                        idTipoUsuario = settingsStorage.getInt("idTipoUsuario", 1)
+                    )
+                }
             }
+        }
+        else -> {}
+    }
+    when (archivosObligatoriosState) {
+        is ResourceUiState.Success -> {
+            val lista = (archivosObligatoriosState as ResourceUiState.Success<List<ArchivoObligatorio>>).data
+            archivosObligatorios = lista
+            if (lista.isNotEmpty() && !archivosObligatoriosDismissed && toggleArchivosObligatorios) showArchivosObligatorios = true
         }
         else -> {}
     }
@@ -526,7 +570,7 @@ fun HomeScreen(
             } else {
                 primerGrupo?.value ?: emptyList()
             }
-            if (clasesHoy.isNotEmpty() && !clasesHoyDismissed) showClasesHoy = true
+            if (clasesHoy.isNotEmpty() && !clasesHoyDismissed && toggleProximasClases) showClasesHoy = true
         }
         else -> {}
     }

@@ -180,6 +180,8 @@ import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenRequest
 import pe.lecordonbleu.universidadestudiante.domain.model.YapeTokenResponse
 import pe.lecordonbleu.universidadestudiante.domain.repository.AppRepository
 import pe.lecordonbleu.universidadestudiante.fetchMpDeviceSession
+import pe.lecordonbleu.universidadestudiante.domain.model.ArchivosObligatoriosRequest
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseArchivosObligatorios
 import kotlin.random.Random
 
 class AppRepositoryImpl(private val httpClient: HttpClient) : AppRepository {
@@ -1583,6 +1585,20 @@ class AppRepositoryImpl(private val httpClient: HttpClient) : AppRepository {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override suspend fun getArchivosObligatorios(request: ArchivosObligatoriosRequest): ResponseArchivosObligatorios {
+        return try {
+            val response = httpClient.post("${Constantes.BASE_ROOT_INTRANET}${Constantes.URL_BASE_INTRANET}archivosObligatorios") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            val json = Json { ignoreUnknownKeys = true }
+            json.decodeFromString<ResponseArchivosObligatorios>(response.body<String>())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseArchivosObligatorios(flag_val = 0, listadoArchivosObligatorios = emptyList())
         }
     }
 }
