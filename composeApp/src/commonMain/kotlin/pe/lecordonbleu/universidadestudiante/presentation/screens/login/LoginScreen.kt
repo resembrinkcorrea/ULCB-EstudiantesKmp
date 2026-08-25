@@ -18,10 +18,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -103,13 +114,22 @@ fun LoginScreen(
     val colors = getColorsTheme()
     val platform = getPlatform()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val focusManager = LocalFocusManager.current
+    val earlyWarmupFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val backgroundRatio = 0.45f
-
 
     LaunchedEffect(Unit) {
         viewModel.resetUiState()
         ipConexion = NetworkUtils.getPublicIPAddress().orEmpty()
+    }
+
+    LaunchedEffect("textWarmup") {
+        delay(1000)
+        try { earlyWarmupFocusRequester.requestFocus() } catch (e: Exception) {}
+        try { earlyWarmupFocusRequester.freeFocus() } catch (e: Exception) {}
+        keyboardController?.hide()
     }
 
     Surface(
@@ -121,6 +141,13 @@ fun LoginScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .pointerInput(Unit) {
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = true)
+                        val up = waitForUpOrCancellation()
+                        if (up != null) focusManager.clearFocus()
+                    }
+                }
                 .drawFoodAppBackground(
                     topColor = colors.colorAzulOscuro,
                     bottomColor = colors.backGroundColor,
@@ -492,6 +519,13 @@ fun LoginScreen(
 
         else -> {}
     }
+
+    var textFieldWarmup by remember { mutableStateOf("") }
+    OutlinedTextField(
+        value = textFieldWarmup,
+        onValueChange = { textFieldWarmup = it },
+        modifier = Modifier.size(1.dp).alpha(0f).focusRequester(earlyWarmupFocusRequester)
+    )
 
     if (showDialog) {
         LoginErrorDialog(
