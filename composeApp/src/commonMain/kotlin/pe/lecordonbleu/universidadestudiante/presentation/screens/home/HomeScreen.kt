@@ -50,6 +50,7 @@ import pe.lecordonbleu.universidadestudiante.logout
 import pe.lecordonbleu.universidadestudiante.openMicrosoftMFA
 import pe.lecordonbleu.universidadestudiante.openMicrosoftPasswordChange
 import pe.lecordonbleu.universidadestudiante.util.openUrl
+import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestadocente.AlertDialogEncuestas
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestasatisfaccion.EncuestaSatisfaccionDialog
 import pe.lecordonbleu.universidadestudiante.presentation.screens.home.encuestadocente.LlenarEncuestaDialog
@@ -65,6 +66,8 @@ import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.Cus
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseActualizarToken
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.Horario
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseHorario
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ArchivoObligatorio
+import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDateTime
 import pe.lecordonbleu.universidadestudiante.util.openPdfFromBytes
 
@@ -122,11 +125,21 @@ fun HomeScreen(
     val fichaMatrState by viewModel.fichaMatrState.collectAsStateWithLifecycle()
     var showFichaMatri by remember { mutableStateOf(false) }
     var isFichaMatriLoading by remember { mutableStateOf(false) }
+    var matricUrl by remember { mutableStateOf("") }
+    var flagProyeccion by remember { mutableStateOf(0) }
+    var idMatric by remember { mutableStateOf(0) }
     val clasesHoyState by viewModel.clasesHoyState.collectAsStateWithLifecycle()
     var clasesHoy by remember { mutableStateOf<List<Horario>>(emptyList()) }
+    var toggleProximasClases by remember { mutableStateOf(settingsStorage.getInt("mostrar_proximas_clases", 1) == 1) }
+    var toggleArchivosObligatorios by remember { mutableStateOf(settingsStorage.getInt("mostrar_archivos_obligatorios", 1) == 1) }
     var showClasesHoy by remember { mutableStateOf(false) }
     var clasesHoyDismissed by remember { mutableStateOf(false) }
     var clasesHoyLanzada by remember { mutableStateOf(false) }
+    val archivosObligatoriosState by viewModel.archivosObligatoriosState.collectAsStateWithLifecycle()
+    var archivosObligatorios by remember { mutableStateOf<List<ArchivoObligatorio>>(emptyList()) }
+    var showArchivosObligatorios by remember { mutableStateOf(false) }
+    var archivosObligatoriosDismissed by remember { mutableStateOf(false) }
+    var archivosObligatoriosLanzado by remember { mutableStateOf(false) }
 
     val token = getFcmToken()
     val tokenGuardado = settingsStorage.getString("fcm_token")
@@ -230,7 +243,19 @@ fun HomeScreen(
                         })
                     }
                 },
-                onGoProfile = { navigator.navigate("/perfilEstudiante") }
+                onGoProfile = { navigator.navigate("/perfilEstudiante") },
+                showProximasClases = toggleProximasClases,
+                onProximasClasesToggle = { enabled ->
+                    toggleProximasClases = enabled
+                    settingsStorage.putInt("mostrar_proximas_clases", if (enabled) 1 else 0)
+                    if (!enabled) showClasesHoy = false else clasesHoyLanzada = false
+                },
+                showArchivosObligatorios = toggleArchivosObligatorios,
+                onArchivosObligatoriosToggle = { enabled ->
+                    toggleArchivosObligatorios = enabled
+                    settingsStorage.putInt("mostrar_archivos_obligatorios", if (enabled) 1 else 0)
+                    if (!enabled) showArchivosObligatorios = false else archivosObligatoriosLanzado = false
+                }
             )
         }
     ) {
@@ -284,6 +309,9 @@ fun HomeScreen(
                         colors = colors,
                         showFichaMatri = showFichaMatri,
                         isFichaMatriLoading = isFichaMatriLoading,
+                        matricUrl = matricUrl,
+                        flagProyeccion = flagProyeccion,
+                        idMatric = idMatric,
                         clasesHoy = clasesHoy,
                         showClasesHoy = showClasesHoy,
                         onClasesHoyClose = {
@@ -291,6 +319,11 @@ fun HomeScreen(
                             clasesHoyDismissed = true
                         },
                         onFichaMatriClick = {
+                            if (matricUrl.isNotEmpty() && matricUrl != "0") {
+                                openUrl(platformContext, matricUrl)
+                            } else if (flagProyeccion > 0 && idMatric > 0) {
+                                // matriculado pero URL aún no generada
+                            } else {
                             val now = getTodayLocalDateTime()
                             val meses = listOf("enero","febrero","marzo","abril","mayo","junio",
                                 "julio","agosto","septiembre","octubre","noviembre","diciembre")
@@ -316,6 +349,7 @@ fun HomeScreen(
                                 promUltMat = settingsStorage.getString("promedioUltMatricula", "").orEmpty()
                             )
                             viewModel.fetchFichaMatricula()
+                            }
                         },
                         onMenuClick = { menu ->
                             when (menu.textoMenuAbrev) {
@@ -342,16 +376,26 @@ fun HomeScreen(
                                 "MIS AVISOS" -> {
                                     navigator.navigate("/misavisos")
                                 }
-                                "VER BOUTIQUE" -> openUrl(platformContext, "https://ecommerce.ulcb.edu.pe/pages/")
+                                "VER BOUTIQUE" -> {
+                                    val dni = settingsStorage.getString("numDocuIden", "").orEmpty()
+                                    val urlBoutique = "${Constantes.RETURN_DOMAIN}.ulcb.edu.pe/UsuarioPersonaServletAPP?accion=autoLogin&u=$dni"
+                                    println("VER BOUTIQUE URL: $urlBoutique")
+                                    openUrl(platformContext, urlBoutique)
+                                }
                             }
                         },
-                        onNavigate = { route -> navigator.navigate(route) }
+                        onNavigate = { route -> navigator.navigate(route) },
+                        archivosObligatorios = archivosObligatorios,
+                        showArchivosObligatorios = showArchivosObligatorios,
+                        onArchivosObligatoriosClose = {
+                            showArchivosObligatorios = false
+                            archivosObligatoriosDismissed = true
+                        }
                     )
                 }
             }
         }
     }
-
 
     when (uiState) {
         is ResourceUiState.Success -> {
@@ -404,6 +448,9 @@ fun HomeScreen(
                 settingsStorage.putString("estadoIngresante", lista[0].estado_ingresante.toString())
                 settingsStorage.putString("promedioUltMatricula", lista[0].promedio_ult_matricula)
                 if (lista[0].id_proce_mat == 1) showFichaMatri = true
+                matricUrl = lista[0].matric_url
+                flagProyeccion = lista[0].flag_proyeccion
+                idMatric = lista[0].id_matric
                 if (!encuestaDocenteLanzada) {
                     encuestaDocenteLanzada = true
                     viewModel.fetchEncuestaDocente(
@@ -413,11 +460,29 @@ fun HomeScreen(
                         idOacadArranque = lista[0].id_oacad_arranque
                     )
                 }
-                if (!clasesHoyLanzada) {
+                if (!clasesHoyLanzada && toggleProximasClases) {
                     clasesHoyLanzada = true
                     viewModel.fetchClasesHoy(lista[0].id_estud_pe, lista[0].id_oacad_arranque)
                 }
+                if (!archivosObligatoriosLanzado && toggleArchivosObligatorios) {
+                    archivosObligatoriosLanzado = true
+                    viewModel.setArchivosObligatorios(
+                        idUneg = settingsStorage.getInt("idUneg", 1),
+                        idEstud = settingsStorage.getInt("idEstud", 0),
+                        idServ = settingsStorage.getInt("idServ", 0),
+                        idUsuario = settingsStorage.getInt("idUsuario", 0),
+                        idTipoUsuario = settingsStorage.getInt("idTipoUsuario", 1)
+                    )
+                }
             }
+        }
+        else -> {}
+    }
+    when (archivosObligatoriosState) {
+        is ResourceUiState.Success -> {
+            val lista = (archivosObligatoriosState as ResourceUiState.Success<List<ArchivoObligatorio>>).data
+            archivosObligatorios = lista
+            if (lista.isNotEmpty() && !archivosObligatoriosDismissed && toggleArchivosObligatorios) showArchivosObligatorios = true
         }
         else -> {}
     }
@@ -493,8 +558,19 @@ fun HomeScreen(
     when (clasesHoyState) {
         is ResourceUiState.Success -> {
             val response = (clasesHoyState as ResourceUiState.Success<ResponseHorario>).data
-            clasesHoy = response.listadoHorario
-            if (!clasesHoyDismissed) showClasesHoy = true
+            val hoy = getTodayLocalDate()
+            val fechaHoyStr = "${hoy.year}-${hoy.monthNumber.toString().padStart(2, '0')}-${hoy.dayOfMonth.toString().padStart(2, '0')}"
+            val grupos = response.listadoHorario
+                .groupBy { it.hor_asis_dia }
+                .entries
+                .sortedBy { it.key }
+            val primerGrupo = grupos.firstOrNull()
+            clasesHoy = if (primerGrupo?.key == fechaHoyStr) {
+                grupos.take(2).flatMap { it.value }
+            } else {
+                primerGrupo?.value ?: emptyList()
+            }
+            if (clasesHoy.isNotEmpty() && !clasesHoyDismissed && toggleProximasClases) showClasesHoy = true
         }
         else -> {}
     }

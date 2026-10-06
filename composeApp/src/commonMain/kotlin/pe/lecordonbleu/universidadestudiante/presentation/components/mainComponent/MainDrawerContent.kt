@@ -20,10 +20,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,7 +61,11 @@ fun MainDrawerContent(
     colors: DarkModeColors,
     onCloseDrawer: () -> Unit,
     onLogoutClick: () -> Unit,
-    onGoProfile: () -> Unit
+    onGoProfile: () -> Unit,
+    showProximasClases: Boolean = true,
+    onProximasClasesToggle: (Boolean) -> Unit = {},
+    showArchivosObligatorios: Boolean = true,
+    onArchivosObligatoriosToggle: (Boolean) -> Unit = {}
 ) {
     ModalDrawerSheet(
         drawerContainerColor = Color.Transparent,
@@ -223,6 +231,38 @@ fun MainDrawerContent(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                ) {
+                    Text(
+                        text = "DASHBOARD",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textColor.copy(alpha = 0.4f),
+                        letterSpacing = 1.5.sp,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    DrawerToggleItem(
+                        label = "Próximas clases",
+                        icon = { Icon(Icons.Rounded.CalendarMonth, null, tint = colors.colorMixPrimary, modifier = Modifier.size(20.dp)) },
+                        checked = showProximasClases,
+                        onCheckedChange = onProximasClasesToggle,
+                        colors = colors
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    DrawerToggleItem(
+                        label = "Archivos obligatorios",
+                        icon = { Icon(Icons.Default.Folder, null, tint = colors.colorRojo, modifier = Modifier.size(20.dp)) },
+                        checked = showArchivosObligatorios,
+                        onCheckedChange = onArchivosObligatoriosToggle,
+                        colors = colors
+                    )
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 Surface(
@@ -265,5 +305,41 @@ fun MainDrawerContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DrawerToggleItem(
+    label: String,
+    icon: @Composable () -> Unit,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    colors: DarkModeColors
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            icon()
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = label,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = colors.textColor
+            )
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = colors.colorBlancoGris,
+                checkedTrackColor = colors.colorMixPrimary,
+                uncheckedThumbColor = colors.colorGrisNeutro,
+                uncheckedTrackColor = colors.colorGrisNeutro.copy(alpha = 0.3f)
+            )
+        )
     }
 }

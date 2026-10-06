@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import pe.lecordonbleu.universidadestudiante.DarkModeColors
 
 data class DatosRecojo(
     val dni: String = "",
@@ -38,6 +39,7 @@ fun DialogEntregaPresencial(
     visible: Boolean,
     onDismiss: () -> Unit,
     onConfirm: (Int, String, String) -> Unit,
+    colors: DarkModeColors,
     preset: Boolean = false,
     initialRecojo: Boolean = false,
     initialDni: String = "",
@@ -71,10 +73,10 @@ fun DialogEntregaPresencial(
                         errorMessage.value = ""
                         onConfirm(1, "", "")
                     }
-                }) { Text("Aceptar") }
+                }) { Text("Aceptar", color = colors.colorMixPrimary) }
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) { Text("Cancelar") }
+                TextButton(onClick = onDismiss) { Text("Cancelar", color = colors.colorMixPrimary) }
             },
             title = { Text("Entrega presencial") },
             text = {

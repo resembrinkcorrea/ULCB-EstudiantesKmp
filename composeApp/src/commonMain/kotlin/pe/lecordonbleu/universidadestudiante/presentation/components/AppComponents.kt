@@ -27,7 +27,13 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import kotlinx.coroutines.delay
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -69,7 +75,6 @@ import org.jetbrains.compose.resources.painterResource
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
 import pe.lecordonbleu.universidadestudiante.leCordonBleuFont
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.AccionIconButton
-import ulcbintranetkmp.composeapp.generated.resources.ulcb_logo_circle
 
 @Composable
 fun MyTextFieldComponent(
@@ -241,6 +246,188 @@ fun <T> AppDropdownMenu(
                             else Color.Transparent
                         )
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> SearchableDropdownMenu(
+    items: List<T>,
+    selectedItem: T?,
+    onItemSelected: (T) -> Unit,
+    itemLabel: (T) -> String,
+    label: String = "",
+    placeholder: String = "Seleccionar",
+    searchPlaceholder: String = "Buscar...",
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+    var debouncedQuery by remember { mutableStateOf("") }
+    val colors = getColorsTheme()
+    val focusRequester = remember { FocusRequester() }
+
+    val displayText = selectedItem?.let { itemLabel(it) } ?: placeholder
+
+    LaunchedEffect(searchQuery) {
+        if (searchQuery.isEmpty()) debouncedQuery = ""
+        else { delay(800); debouncedQuery = searchQuery }
+    }
+
+    val filteredItems = remember(debouncedQuery, items) {
+        if (debouncedQuery.isEmpty()) items
+        else items.filter { itemLabel(it).contains(debouncedQuery, ignoreCase = true) }
+    }
+
+    LaunchedEffect(expanded) {
+        if (expanded) {
+            delay(100)
+            try { focusRequester.requestFocus() } catch (_: Exception) {}
+        } else {
+            searchQuery = ""
+            debouncedQuery = ""
+        }
+    }
+
+    Column(modifier = modifier) {
+        Box {
+            androidx.compose.material3.OutlinedTextField(
+                value = displayText,
+                onValueChange = {},
+                readOnly = true,
+                enabled = enabled,
+                label = if (label.isNotEmpty()) {
+                    {
+                        Text(
+                            text = label,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = colors.textColor.copy(alpha = 0.6f)
+                        )
+                    }
+                } else null,
+                trailingIcon = {
+                    androidx.compose.material3.Icon(
+                        imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        tint = if (expanded) colors.colorMixPrimary else colors.textColor.copy(alpha = 0.5f)
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = colors.textColor,
+                    unfocusedTextColor = colors.textColor,
+                    disabledTextColor = colors.textColor.copy(alpha = 0.5f),
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedBorderColor = colors.colorMixPrimary,
+                    unfocusedBorderColor = colors.textColor.copy(alpha = 0.2f),
+                    disabledBorderColor = colors.textColor.copy(alpha = 0.1f),
+                    focusedLabelColor = colors.colorMixPrimary,
+                    unfocusedLabelColor = colors.textColor.copy(alpha = 0.6f),
+                    focusedTrailingIconColor = colors.colorMixPrimary,
+                    unfocusedTrailingIconColor = colors.textColor.copy(alpha = 0.5f)
+                ),
+                textStyle = LocalTextStyle.current.copy(fontSize = 15.sp, fontWeight = FontWeight.Medium),
+                singleLine = true
+            )
+            if (enabled) {
+                Box(modifier = Modifier.matchParentSize().clickable { expanded = !expanded })
+            }
+        }
+
+        AnimatedVisibility(visible = expanded) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                    .background(colors.colorExpenseItem)
+                    .border(1.dp, colors.textColor.copy(alpha = 0.12f),
+                        RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+            ) {
+                androidx.compose.material3.OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = {
+                        androidx.compose.material3.Text(
+                            text = searchPlaceholder, fontSize = 14.sp,
+                            color = colors.textColor.copy(alpha = 0.4f)
+                        )
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                        .focusRequester(focusRequester),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = colors.textColor,
+                        unfocusedTextColor = colors.textColor,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedBorderColor = colors.colorMixPrimary,
+                        unfocusedBorderColor = colors.textColor.copy(alpha = 0.2f),
+                        cursorColor = colors.colorMixPrimary
+                    ),
+                    textStyle = LocalTextStyle.current.copy(fontSize = 14.sp)
+                )
+
+                if (debouncedQuery.isNotEmpty() && filteredItems.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Sin resultados", fontSize = 14.sp,
+                            color = colors.textColor.copy(alpha = 0.4f))
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 250.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        filteredItems.forEach { item ->
+                            val isSelected = item == selectedItem
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(
+                                        if (isSelected) colors.colorMixPrimary.copy(alpha = 0.08f)
+                                        else Color.Transparent
+                                    )
+                                    .clickable { expanded = false; onItemSelected(item) }
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                androidx.compose.material3.Text(
+                                    text = itemLabel(item),
+                                    color = if (isSelected) colors.colorMixPrimary else colors.textColor,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                                )
+                                if (isSelected) {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Rounded.Check,
+                                        contentDescription = null,
+                                        tint = colors.colorMixPrimary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -575,3 +762,4 @@ fun LockedRow(label: String) {
         )
     }
 }
+

@@ -342,8 +342,8 @@ class MatriculaViewModel(private val repo: AppRepository) : ViewModel() {
 
     // ─── Horario PDF ──────────────────────────────────────────────────────────
 
-    fun setHorarioPDF(periodo: String, cursos: List<ListVerMatric>) {
-        horarioPDFRequest = HorarioPDFRequest(periodo, cursos.map { it.toCursoHorarioPDF() })
+    fun setHorarioPDF(periodo: String, cursos: List<ListVerMatric>, idUneg: Int) {
+        horarioPDFRequest = HorarioPDFRequest(periodo, cursos.map { it.toCursoHorarioPDF() }, idUneg)
         fetchHorarioPDF()
     }
 

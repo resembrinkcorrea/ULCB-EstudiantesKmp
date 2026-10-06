@@ -20,6 +20,8 @@ import pe.lecordonbleu.universidadestudiante.presentation.screens.cuentacorrient
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.TramiteDocumentarioViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.RegistrarTramiteDocumentarioViewModel
 import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.MatriculaViewModel
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.YapeViewModel
+import pe.lecordonbleu.universidadestudiante.presentation.screens.mercadopago.MercadoPagoViewModel
 
 fun appModule() = module {
 
@@ -49,4 +51,6 @@ fun appModule() = module {
     factory { MatriculaViewModel(get()) }
     factory { TramiteDocumentarioViewModel(get()) }
     factory { RegistrarTramiteDocumentarioViewModel(get()) }
+    factory { YapeViewModel(get()) }
+    factory { MercadoPagoViewModel(get()) }
 }

@@ -4,6 +4,9 @@ target 'iosApp' do
   use_frameworks! :linkage => :static
 
   pod 'MSAL', '2.7.0'
+  pod 'MercadoPagoDevicesSDK', :path => '../composeApp/local-pods/MercadoPagoDevicesSDK'
+  pod 'MercadoPagoSDKCoreMethods', :git => 'https://github.com/mercadopago/sdk-ios.git', :tag => '1.0.0'
+  pod 'MPCoreBridge', :path => '../composeApp/local-pods/MPCoreBridge'
   pod 'composeApp', :path => '../composeApp'
   pod 'FirebaseCore'
   pod 'FirebaseMessaging'
@@ -16,6 +19,9 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      config.build_settings['SWIFT_VERSION'] = '5.0' if target.name == 'MercadoPagoDevicesSDK'
+      config.build_settings['SWIFT_VERSION'] = '6.0' if target.name == 'MercadoPagoSDKCoreMethods'
+      config.build_settings['SWIFT_VERSION'] = '5.0' if target.name == 'MPCoreBridge'
     end
   end
 end

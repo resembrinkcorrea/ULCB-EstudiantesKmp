@@ -52,6 +52,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import pe.lecordonbleu.universidadestudiante.LoadingIndicator
 import pe.lecordonbleu.universidadestudiante.SettingsStorage
+import pe.lecordonbleu.universidadestudiante.core.config.Constantes
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CarreraRemote
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.CorreccionDocumentos
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.EstadoTramite
@@ -66,7 +67,8 @@ import pe.lecordonbleu.universidadestudiante.getPlatformContext
 import pe.lecordonbleu.universidadestudiante.getSettingsStorage
 import pe.lecordonbleu.universidadestudiante.getTodayLocalDate
 import pe.lecordonbleu.universidadestudiante.presentation.components.AppDropdownMenu
-import pe.lecordonbleu.universidadestudiante.presentation.components.dialogs.CustomDialogBasic
+import pe.lecordonbleu.universidadestudiante.presentation.components.SearchableDropdownMenu
+import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.DialogCorreccionGuardada
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.DocumentoItemCard
 import pe.lecordonbleu.universidadestudiante.presentation.screens.tramitedocumentario.customcell.FiltrosTramiteExpandable
 import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
@@ -83,8 +85,9 @@ fun TramiteDocumentarioScreen(
     val settings = getSettingsStorage()
     val idUsuario = settings.getInt("idUsuario", settings.getInt("id_usuario", 0))
     val idTipoUsuario = settings.getInt("idTipoUsuario", settings.getInt("id_tipo_usuario", 0))
-    val idSistema = settings.getInt("idSistema", 0)
-    val idUneg = settings.getInt("id_uneg", 1)
+    //val idSistema = settings.getInt("idSistema", 0)
+    val idSistema = 3
+    val idUneg = Constantes.ID_UNEG
     val idEstud = settings.getInt("idEstud", 0)
 
     val today = getTodayLocalDate()
@@ -187,7 +190,10 @@ fun TramiteDocumentarioScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Column {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             AppDropdownMenu(
                                 items = carreras.filterNotNull(),
                                 selectedItem = selectedCarrera,
@@ -203,6 +209,18 @@ fun TramiteDocumentarioScreen(
                                     filtrosLanzados = false
                                 }
                             )
+                            SearchableDropdownMenu(
+                                items = tramites,
+                                selectedItem = selectedTramite,
+                                label = "Trámite",
+                                itemLabel = { if (it.nombre == "SELECCIONE") "TODOS" else it.nombre },
+                                onItemSelected = {
+                                    selectedTramite = it
+                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, idSistema, selectedEstado, selectedTipoTramite, it, fechaInicio, fechaFin)
+                                },
+                                searchPlaceholder = "Buscar trámite...",
+                                enabled = tramites.isNotEmpty()
+                            )
                         }
 
                         Card(
@@ -217,31 +235,25 @@ fun TramiteDocumentarioScreen(
                             FiltrosTramiteExpandable(
                                 estados = filtroData?.Estados ?: emptyList(),
                                 tiposTramite = filtroData?.TipoTramite ?: emptyList(),
-                                tramites = filtroData?.Tramite ?: emptyList(),
                                 selectedEstado = selectedEstado,
                                 selectedTipoTramite = selectedTipoTramite,
-                                selectedTramite = selectedTramite,
                                 onEstadoSelected = {
                                     selectedEstado = it
-                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, it, selectedTipoTramite, selectedTramite, fechaInicio, fechaFin)
+                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, idSistema, it, selectedTipoTramite, selectedTramite, fechaInicio, fechaFin)
                                 },
                                 onTipoTramiteSelected = {
                                     selectedTipoTramite = it
-                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, selectedEstado, it, selectedTramite, fechaInicio, fechaFin)
-                                },
-                                onTramiteSelected = {
-                                    selectedTramite = it
-                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, selectedEstado, selectedTipoTramite, it, fechaInicio, fechaFin)
+                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, idSistema, selectedEstado, it, selectedTramite, fechaInicio, fechaFin)
                                 },
                                 fechaInicio = fechaInicio,
                                 fechaFin = fechaFin,
                                 onFechaInicioChange = {
                                     fechaInicio = it
-                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, selectedEstado, selectedTipoTramite, selectedTramite, it, fechaFin)
+                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, idSistema, selectedEstado, selectedTipoTramite, selectedTramite, it, fechaFin)
                                 },
                                 onFechaFinChange = {
                                     fechaFin = it
-                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, selectedEstado, selectedTipoTramite, selectedTramite, fechaInicio, it)
+                                    viewModel.filtrarDocumentos(idEstud, idUneg, idUsuario, idTipoUsuario, idTipoServa ?: 0, idSistema, selectedEstado, selectedTipoTramite, selectedTramite, fechaInicio, it)
                                 },
                                 isInitiallyExpanded = filtrosExpandido,
                                 onExpandedChange = { filtrosExpandido = it }
@@ -314,7 +326,7 @@ fun TramiteDocumentarioScreen(
                                 idTramiteEstud = id.toIntOrNull() ?: 0,
                                 idTramiteDt = itemSeleccionado.id_tramite.toIntOrNull() ?: 0,
                                 idTipoServa = idTipoServa ?: 0,
-                                id_sistema = 3, //universidad = 3, instituto 13
+                                id_sistema = idSistema,
                                 cantidadMultiple = 0,
                                 id_pest_det = idPestDet ?: 0,
                                 id_estud_pe = idEstudPe,
@@ -335,7 +347,7 @@ fun TramiteDocumentarioScreen(
                             idTramiteEstud = tramite.id_tramite_estud.toIntOrNull() ?: 0,
                             idTramiteDt = tramite.id_tramite.toIntOrNull() ?: 0,
                             idTipoServa = 0,
-                            id_sistema = 3,
+                            id_sistema = idSistema,
                             cantidadMultiple = 0,
                             id_pest_det = 0,
                             id_estud_pe = 0,
@@ -346,7 +358,7 @@ fun TramiteDocumentarioScreen(
                         if (textoCorregido.isNotBlank()) {
                             viewModel.setCorreccionTramiteSaveRequest(
                                 descripcion = textoCorregido,
-                                id_sistema = 3,
+                                id_sistema = idSistema,
                                 id_tramite = tramite.id_tramite.toIntOrNull() ?: 0,
                                 id_usuario = idUsuario,
                                 id_tipo_usuario = idTipoUsuario,
@@ -391,7 +403,7 @@ fun TramiteDocumentarioScreen(
                         idTramiteEstud = 0,
                         idTramiteDt = 0,
                         idTipoServa = it.id_tiposerva.toIntOrNull() ?: 0,
-                        id_sistema = 3,
+                        id_sistema = idSistema,
                         cantidadMultiple = 0,
                         id_pest_det = it.id_pest_det.toIntOrNull() ?: 0,
                         id_estud_pe = 0,
@@ -399,7 +411,7 @@ fun TramiteDocumentarioScreen(
                     )
                     viewModel.setDocumentosCreadosRequest(
                         idTramite = selectedTramite?.id?.toIntOrNull() ?: 0,
-                        idSistema = 3,
+                        idSistema = idSistema,
                         idEstado = selectedEstado?.id_paragene?.toIntOrNull() ?: 0,
                         fechaInicio = fechaInicio,
                         idUsuario = idUsuario,
@@ -526,16 +538,31 @@ fun TramiteDocumentarioScreen(
     }
 
     if (showDialogCorreccion) {
-        CustomDialogBasic(
-            visible = true,
+        DialogCorreccionGuardada(
             titulo = dialogData?.titulo ?: "TRAMITE DOCUMENTARIO",
-            mensaje = dialogData?.mensaje ?: "Se registro la correccion.",
-            flag_val = 1,
-            confirmado = true,
-            onDismiss = {
+            mensaje = dialogData?.mensaje ?: "Trámite",
+            onConfirm = {
                 showDialogCorreccion = false
                 dialogData = null
                 viewModel.resetCorreccionTramiteState()
+                isRefreshing = true
+                itemExpandidoId = null
+                trcList = emptyList()
+                requisitosMap.clear()
+                viewModel.setDocumentosCreadosRequest(
+                    idTramite = selectedTramite?.id?.toIntOrNull() ?: 0,
+                    idSistema = idSistema,
+                    idEstado = selectedEstado?.id_paragene?.toIntOrNull() ?: 0,
+                    fechaInicio = fechaInicio,
+                    idUsuario = idUsuario,
+                    idTipoUsuario = idTipoUsuario,
+                    idUNEG = idUneg,
+                    idTipoTramite = selectedTipoTramite?.id?.toIntOrNull() ?: 0,
+                    condicion = 1,
+                    fechaFin = fechaFin,
+                    idEstud = idEstud,
+                    idTipoServa = idTipoServa ?: 0
+                )
             }
         )
     }

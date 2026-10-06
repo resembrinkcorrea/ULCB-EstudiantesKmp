@@ -10,4 +10,5 @@ fun doInitKoin() {
     startKoin {
         modules(appModule())
     }
+    pe.lecordonbleu.universidadestudiante.presentation.screens.qr.warmUpQrGenerator()
 }

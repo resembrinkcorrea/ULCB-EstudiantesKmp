@@ -4,7 +4,6 @@ package pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,8 +45,26 @@ import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListProyeccionValid
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListDetMatric
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListResumenHist
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ListVerMatric
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripePink
+import pe.lecordonbleu.universidadestudiante.core.theme.IlcbStripeRed
 import pe.lecordonbleu.universidadestudiante.getColorsTheme
+import pe.lecordonbleu.universidadestudiante.getPlatformContext
 import pe.lecordonbleu.universidadestudiante.getSettingsStorage
+import pe.lecordonbleu.universidadestudiante.showToast
+import pe.lecordonbleu.universidadestudiante.util.openPdfFromBase64
 import pe.lecordonbleu.universidadestudiante.presentation.components.AppDropdownMenu
 import pe.lecordonbleu.universidadestudiante.presentation.components.StandardTopBar
 import pe.lecordonbleu.universidadestudiante.presentation.screens.vermatricula.customcell.MatriculaCard
@@ -63,6 +80,7 @@ fun VerMatriculaScreen(
     // ─── 1. Variables y estados ───────────────────────────────────────────────
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val colors = getColorsTheme()
+    val context = getPlatformContext()
     val settings = getSettingsStorage()
     val idEstud = settings.getInt("idEstud", 0)
     val idUsuario = settings.getInt("idUsuario", 0)
@@ -70,6 +88,7 @@ fun VerMatriculaScreen(
     val idSistema = settings.getInt("idSistema", 0)
 
     val uiStateProyeccion by viewModel.uiStateProyeccion.collectAsStateWithLifecycle()
+    val uiStateHorarioPDF by viewModel.uiStateHorarioPDF.collectAsStateWithLifecycle()
     val uiStateCarrera by viewModel.uiStateCarrera.collectAsStateWithLifecycle()
     val uiStateVerMatricula by viewModel.uiStateVerMatricula.collectAsStateWithLifecycle()
     val uiStateDetalleMatricula by viewModel.uiStateDetalleMatricula.collectAsStateWithLifecycle()
@@ -226,7 +245,35 @@ fun VerMatriculaScreen(
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     }
-                    2 -> HorarioMatriculaTab(items = verMatriculaList)
+                    2 -> Box(modifier = Modifier.fillMaxSize()) {
+                        HorarioMatriculaTab(items = verMatriculaList)
+                        if (verMatriculaList.isNotEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(16.dp)
+                                    .size(56.dp)
+                                    .shadow(8.dp, CircleShape)
+                                    .clip(CircleShape)
+                                    .background(
+                                        Brush.linearGradient(
+                                            listOf(IlcbStripePink, IlcbStripeRed)
+                                        )
+                                    )
+                                    .clickable {
+                                        val periodo = verMatriculaList.firstOrNull()?.peracad_nombre.orEmpty()
+                                        viewModel.setHorarioPDF(periodo, verMatriculaList, Constantes.ID_UNEG)
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Share,
+                                    contentDescription = "Compartir horario",
+                                    tint = Color.White
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -311,6 +358,25 @@ fun VerMatriculaScreen(
             viewModel.resetResumenHistoricoState()
         }
         is ResourceUiState.Error -> { showLoading = false }
+        ResourceUiState.Empty -> {}
+    }
+
+    when (val s = uiStateHorarioPDF) {
+        is ResourceUiState.Loading -> { showLoading = true }
+        is ResourceUiState.Success -> {
+            showLoading = false
+            if (s.data.flag_val == 1 && s.data.pdfbase64.isNotBlank()) {
+                openPdfFromBase64(context, s.data.pdfbase64)
+            } else {
+                showToast(s.data.mensaje.ifBlank { "No se pudo generar el PDF" })
+            }
+            viewModel.resetHorarioPDFState()
+        }
+        is ResourceUiState.Error -> {
+            showLoading = false
+            showToast("Error al generar PDF")
+            viewModel.resetHorarioPDFState()
+        }
         ResourceUiState.Empty -> {}
     }
 }

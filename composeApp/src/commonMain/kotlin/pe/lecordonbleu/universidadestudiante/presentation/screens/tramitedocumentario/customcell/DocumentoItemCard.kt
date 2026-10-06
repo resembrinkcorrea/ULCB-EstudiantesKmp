@@ -82,6 +82,7 @@ fun DocumentoItemCard(
                 datosRecojo = DatosRecojo(dni = dni, nombres = nombres, recoger = recoger)
                 mostrarDialogEntregaPresencial.value = false
             },
+            colors = colors,
             preset = true,
             initialRecojo = tramite.flag_recojo == "1",
             initialDni = tramite.dni_presencial,

@@ -2,6 +2,7 @@ package pe.lecordonbleu.universidadestudiante
 
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
 class AndroidPlatform : Platform {
@@ -14,3 +15,6 @@ actual fun getPlatform(): Platform = AndroidPlatform()
 actual fun getPlatformContext(): Any? = LocalContext.current
 
 actual fun getSistemaCapByPlatform(): Int = 10
+
+actual fun Modifier.imeKeyboardPadding(): Modifier = this
+

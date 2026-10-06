@@ -395,7 +395,7 @@ fun MatriculaScreen(
                                     navigator.navigate("/cuentaCorriente")
                                 },
                                 onCompartirHorarioClick = { periodo, cursos ->
-                                    viewModel.setHorarioPDF(periodo, cursos)
+                                    viewModel.setHorarioPDF(periodo, cursos, Constantes.ID_UNEG)
                                 }
                             )
                         }

@@ -16,7 +16,8 @@ data class CursoHorarioPDF(
 @Serializable
 data class HorarioPDFRequest(
     val periodo: String,
-    val cursos: List<CursoHorarioPDF>
+    val cursos: List<CursoHorarioPDF>,
+    val idUneg: Int = 1
 )
 
 fun ListVerMatric.toCursoHorarioPDF() = CursoHorarioPDF(

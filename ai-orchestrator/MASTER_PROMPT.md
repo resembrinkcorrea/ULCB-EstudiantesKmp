@@ -133,6 +133,54 @@ Recibo una instrucción
 
 ---
 
+**Trigger de análisis**: si el usuario escribe `reloader analisis <modulo>` (sin importar mayúsculas/minúsculas):
+
+**Acción inmediata**:
+1. Leer `ai-orchestrator/flows/analisis-modulo.md`
+2. Seguir ese flow exactamente, usando `<modulo>` como alcance
+3. Lanzar el agente en background sin más preguntas si el módulo está claro
+   Si el módulo es ambiguo, hacer solo las preguntas definidas en el Paso 1 del flow
+
+**Respuesta permitida al disparar**: solo `"Analizando <modulo> en background — seguí trabajando."` o similar breve.
+
+---
+
+## TRIGGER — BASE DE DATOS PRODUCCIÓN
+
+**Trigger de entrada**: si el usuario escribe `reloader database` (sin importar mayúsculas/minúsculas):
+
+**Acción inmediata**:
+1. Leer `ai-orchestrator/domains/sqlserver.md`
+2. Ejecutar la conexión con sqlcmd usando las credenciales del archivo
+3. Confirmar conexión activa y quedar listo para recibir consultas SQL
+
+**Respuesta permitida**: solo `"Conexión activa."` seguido del resultado del comando.
+
+**Prohibido**:
+- Pedir las credenciales al usuario
+- Mostrar la contraseña en el output
+- Cualquier explicación adicional
+
+---
+
+## TRIGGER — BASE DE DATOS PRE-PRODUCCIÓN
+
+**Trigger de entrada**: si el usuario escribe `reloader database pre` (sin importar mayúsculas/minúsculas):
+
+**Acción inmediata**:
+1. Leer `ai-orchestrator/domains/sqlserver-pre.md`
+2. Ejecutar la conexión con sqlcmd usando las credenciales del archivo
+3. Confirmar conexión activa y quedar listo para recibir consultas SQL
+
+**Respuesta permitida**: solo `"Conexión activa — pre-producción."` seguido del resultado del comando.
+
+**Prohibido**:
+- Pedir las credenciales al usuario
+- Mostrar la contraseña en el output
+- Cualquier explicación adicional
+
+---
+
 ## PROHIBIDO
 
 - Usar memoria interna de Claude como fuente de verdad

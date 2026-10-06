@@ -6,8 +6,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
+import pe.lecordonbleu.universidadestudiante.SettingsStorage
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCarreraRemote
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseCrearTramites
+import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePasarelasActivas
+import pe.lecordonbleu.universidadestudiante.domain.model.PasarelasActivasRequest
+import pe.lecordonbleu.universidadestudiante.getSettingsStorage
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseDuplicadoTituloGuardar
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponsePerfilEstudiante
 import pe.lecordonbleu.universidadestudiante.data.remote.dto.ResponseRegistrarTramite
@@ -36,6 +40,8 @@ import pe.lecordonbleu.universidadestudiante.presentation.vo.ResourceUiState
 
 class RegistrarTramiteDocumentarioViewModel(private val repo: AppRepository) : ViewModel() {
 
+    private val _uiStatePasarelas =
+        MutableStateFlow<ResourceUiState<ResponsePasarelasActivas>>(ResourceUiState.Empty)
     private val _uiStateCarrera =
         MutableStateFlow<ResourceUiState<List<ResponseCarreraRemote>>>(ResourceUiState.Empty)
     private val _uiStateTramiteDocFiltro =
@@ -63,6 +69,7 @@ class RegistrarTramiteDocumentarioViewModel(private val repo: AppRepository) : V
     private val _uiStateTemporalCuentaCorriente =
         MutableStateFlow<ResourceUiState<ResponseTemporalCuentaCorriente>>(ResourceUiState.Empty)
 
+    val uiStatePasarelas = _uiStatePasarelas.asStateFlow()
     val uiStateCarrera = _uiStateCarrera.asStateFlow()
     val uiStateTramiteDocFiltro = _uiStateTramiteDocFiltro.asStateFlow()
     val uiStatePaises = _uiStatePaises.asStateFlow()
@@ -458,5 +465,24 @@ class RegistrarTramiteDocumentarioViewModel(private val repo: AppRepository) : V
 
     fun resetCarreraState() {
         _uiStateCarrera.value = ResourceUiState.Empty
+    }
+
+    fun setPasarelasActivas(condicion: Int, idUneg: Int) {
+        viewModelScope.launch {
+            _uiStatePasarelas.value = ResourceUiState.Loading
+            try {
+                val settingsStorage: SettingsStorage = getSettingsStorage()
+                val idSistema = settingsStorage.getInt("idSistema", 0)
+                val idUsuario = settingsStorage.getInt("idUsuario", 0)
+                val result = repo.getPasarelasActivas(PasarelasActivasRequest(condicion, idUneg, idSistema, idUsuario))
+                _uiStatePasarelas.value = ResourceUiState.Success(result)
+            } catch (e: Exception) {
+                _uiStatePasarelas.value = ResourceUiState.Error(e.message ?: "Error al obtener pasarelas")
+            }
+        }
+    }
+
+    fun resetPasarelasState() {
+        _uiStatePasarelas.value = ResourceUiState.Empty
     }
 }

@@ -19,3 +19,5 @@ actual fun getTodayLocalDateTime(): LocalDateTime {
         .now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
 }
+
+actual fun currentTimeMillis(): Long = System.currentTimeMillis()
